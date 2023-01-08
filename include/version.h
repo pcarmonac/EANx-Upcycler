@@ -12,7 +12,7 @@
 #define MODEL "EANx O2 Upcycler"
 #define VERSION "1.1 alpha"
 #define FILE "EANx_Analyzer_OLED_TFT_eSPI.ino"
-#define VAL_MCU "Unknown"
+
 
 /*
  * One Route is to Embed the Date and time from GCC 

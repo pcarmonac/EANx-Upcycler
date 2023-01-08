@@ -22,9 +22,6 @@
 #include <Adafruit_ADS1X15.h>
 #include "pin_config.h"
 #include "version.h"
-//#ifdef ESP32
-//  #include "bat_stat.h"
-//#endif
 
 //Functions
 void o2calibration();
@@ -34,6 +31,7 @@ void testfillcircles(uint8_t radius, uint16_t color);
 void testdrawcircles(uint8_t radius, uint16_t color);
 void safetyrule();
 float batStat();
+void setupOTA();
 
 //Debugging code
 #define DEBUG 1
@@ -59,7 +57,7 @@ Adafruit_ADS1115 ads;  // Define ADC - 16-bit version
 #define RA_SIZE 20           //Define running average pool size
 RunningAverage RA(RA_SIZE);  //Initialize Running Average
 
-// Global Variabls
+// Global Variables
 float prevaveSensorValue = 0;
 float aveSensorValue = 0;
 float mVolts = 0;
@@ -72,8 +70,6 @@ int modmsw = 0;
 float modppo = 1.4;
 float multiplier = 0;
 int msgid = 0;
-float BAT_ADJ;
-int BUTTON_PIN;
 
 const int buttonPin = BUTTON_PIN;  // push button
 
@@ -83,8 +79,8 @@ void setup() {
   printVersionToSerial();
 
   //OTA
-  //ArduinoOTA.setHostname(OTADEVICE);
-  //setupOTA(OTADEVICE, mySSID, myPASSWORD);}
+  // ArduinoOTA.setHostname(OTADEVICE);
+  // setupOTA(OTADEVICE, mySSID, myPASSWORD);
 
   pinMode(buttonPin, INPUT_PULLUP);
 

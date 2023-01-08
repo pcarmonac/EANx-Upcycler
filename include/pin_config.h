@@ -81,7 +81,7 @@
   #include "bat_stat.h"
   #define BAT_ADJ       1.0
 
-#elif defined(ARDUINO_TTGO)  //Lilygo OI
+#elif defined(ARDUINO_TTGO_T_OI_PLUS_DEV)  //Lilygo OI
   #define SDA           19    
   #define SCL           18
   // Traditional Pin Setup
@@ -101,9 +101,10 @@
 
   #define BUTTON_PIN    9
   #define OTADEVICE     "TTGOOI_EANx"
-  #define VAL_MCU       "Lilygo T OI ESP32 C3"
+  #define VAL_MCU       "TTGO T-OI PLUS RISC-V ESP32-C3"
   #include "bat_stat.h"
   #define BAT_ADJ       1.0
+  #include "OTA.h"
 
 #else
   // For the breakout board, you can use any 2 or 3 pins.
