@@ -1,4 +1,3 @@
-
 /*****************************************************************************
 
   EANx Analysis with output to an OLED color display
