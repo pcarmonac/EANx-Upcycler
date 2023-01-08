@@ -23,17 +23,7 @@
 #include "pin_config.h"
 #include "version.h"
 
-//Functions
-void o2calibration();
-float initADC();
-void printLayout();
-void testfillcircles(uint8_t radius, uint16_t color);
-void testdrawcircles(uint8_t radius, uint16_t color);
-void safetyrule();
-float batStat();
-void setupOTA();
-
-//Debugging code
+//Debugging
 #define DEBUG 1
 
 #if DEBUG == 1
@@ -43,6 +33,15 @@ void setupOTA();
   #define debug(x)
   #define debugln(x)
 #endif
+
+//Functions
+void o2calibration();
+float initADC();
+void printLayout();
+void testfillcircles(uint8_t radius, uint16_t color);
+void testdrawcircles(uint8_t radius, uint16_t color);
+void safetyrule();
+float batStat();
 
 // display definitions
 #define TFT_WIDTH 240   // OLED display width, in pixels
@@ -78,10 +77,6 @@ void setup() {
   // Call our validation to output the message (could be to screen / web page etc)
   printVersionToSerial();
 
-  //OTA
-  // ArduinoOTA.setHostname(OTADEVICE);
-  // setupOTA(OTADEVICE, mySSID, myPASSWORD);
-
   pinMode(buttonPin, INPUT_PULLUP);
 
   //setup TFT
@@ -116,9 +111,6 @@ void setup() {
 
 // the loop routine runs over and over again forever:
 void loop() {
-
-  // Enable for OTA
-  // ArduinoOTA.handle();
 
   multiplier = initADC();
 

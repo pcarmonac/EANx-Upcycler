@@ -1,5 +1,5 @@
 /*
-  Chip Specific settings to interface wiht OTA, battery status and LCD
+  Chip Specific settings to interface battery status and LCD
 
 */
 
@@ -23,7 +23,6 @@
   #define TFT_MOSI      10    // Data out
   #define TFT_SCLK      8     // Clock out
   #define BUTTON_PIN    1
-  #define OTADEVICE     "SEEED_XIAO_EANx"
   #define VAL_MCU       "Seeed Xiao M0"
 
 #elif defined(ARDUINO_XIAO_ESP32C3)  // Seeed XIAO ESP32 C3
@@ -35,8 +34,6 @@
   #define TFT_SCLK      8     // Clock out  
   #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin 
   #define BUTTON_PIN    3
-  #define OTACHK        0
-  #define OTADEVICE     "XIAO_ESP32_EANx"
   #define VAL_MCU       "Seeed Xiao ESP32 C3"
   #include "bat_stat.h"
   #define BAT_ADJ       0.85
@@ -50,7 +47,6 @@
   #define TFT_DC        10
   #define TFT_CS        9
   #define BUTTON_PIN    4
-  #define OTADEVICE     "ESP32_PICO_EANx"  
   #define VAL_MCU       "ESP32 Pico D4"
   #include "bat_stat.h"
   #define BAT_ADJ       1.0
@@ -76,7 +72,6 @@
   #define TFT_DC        3
   #define TFT_CS        34
   #define BUTTON_PIN    4
-  #define OTADEVICE     "TINYS3_EANx"
   #define VAL_MCU       "UM Tiny S3 ESP32"
   #include "bat_stat.h"
   #define BAT_ADJ       1.0
@@ -100,11 +95,9 @@
   #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin
 
   #define BUTTON_PIN    9
-  #define OTADEVICE     "TTGOOI_EANx"
   #define VAL_MCU       "TTGO T-OI PLUS RISC-V ESP32-C3"
   #include "bat_stat.h"
-  #define BAT_ADJ       1.0
-  #include "OTA.h"
+  #define BAT_ADJ       1.0   
 
 #else
   // For the breakout board, you can use any 2 or 3 pins.

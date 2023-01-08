@@ -10,8 +10,8 @@
 
 //Software Definitions
 #define MODEL "EANx O2 Upcycler"
-#define VERSION "1.1 alpha"
-#define FILE "EANx_Analyzer_OLED_TFT_eSPI.ino"
+#define VERSION "0.1.1 alpha"
+#define FILE "EANx_Upcycler on Platform IO"
 
 
 /*
