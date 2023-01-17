@@ -85,7 +85,6 @@
   #define TFT_DC        10
   #define TFT_CS        5  //Unused MISO pin
 
-
   /*// Hybrid Straight Line PCB Setup
   #define TFT_CS        4
   #define TFT_DC        5
@@ -93,7 +92,6 @@
   #define TFT_SCLK      10     // Clock out  */
   
   #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin
-
   #define BUTTON_PIN    9
   #define VAL_MCU       "TTGO T-OI PLUS RISC-V ESP32-C3"
   #include "bat_stat.h"

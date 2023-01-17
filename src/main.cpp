@@ -199,7 +199,7 @@ void setup() {
   debugln("Pinmode Init");
 
   //setup TFT
-  //tft.init();
+  tft.init();
   debugln("TFT Init");
   tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
