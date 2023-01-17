@@ -115,13 +115,13 @@ void o2calibration() {
   RA.clear();
   for (int x = 0; x <= (RA_SIZE * 3); x++) {
     int sensorValue = 0;
-    sensorValue = ads.readADC_Differential_0_1();
+    sensorValue = abs(ads.readADC_Differential_0_1());
     RA.addValue(sensorValue);
     delay(16);
     // debug("calibrating ");
     // debugln(sensorValue);  //raw sensor serial print for debugging
   }
-  debug("average calibration read");
+  debug("average calibration read ");
   debugln(RA.getAverage());  // average cal factor serial print for debugging
 
   tft.fillScreen(TFT_BLACK);
@@ -197,8 +197,10 @@ void setup() {
 
   pinMode(buttonPin, INPUT_PULLUP);
 
+
   //setup TFT
   tft.init();
+  debugln("TFT Init");
   tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
 
@@ -244,7 +246,7 @@ void loop() {
   RA.clear();
   for (int x = 0; x <= RA_SIZE; x++) {
     int sensorValue = 0;
-    sensorValue = ads.readADC_Differential_0_1();
+    sensorValue = abs(ads.readADC_Differential_0_1());
     RA.addValue(sensorValue);
     delay(16);
     //debugln(sensorValue);    //mV serial print for debugging
