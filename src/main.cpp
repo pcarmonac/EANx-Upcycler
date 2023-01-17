@@ -23,7 +23,7 @@
 #include "version.h"
 
 //Debugging
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG == 1
   #define debug(x) Serial.print(x)
