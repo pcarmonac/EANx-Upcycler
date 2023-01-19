@@ -23,7 +23,7 @@
 #include "version.h"
 
 //Debugging
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG == 1
   #define debug(x) Serial.print(x)
@@ -141,8 +141,6 @@ void printLayout() {
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
   tft.drawString("MOD", TFT_WIDTH * .60, TFT_HEIGHT * .6, 2);
 }
-
-
 
 void testfillcircles(uint8_t radius, uint16_t color) {
   for (int16_t x = radius; x < tft.width(); x += radius * 2) {

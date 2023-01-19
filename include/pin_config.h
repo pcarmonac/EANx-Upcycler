@@ -1,8 +1,4 @@
-/*
-  Chip Specific settings to interface battery status and LCD
-
-*/
-
+// Chip Specific settings to interface battery status and LCD
 
 #if defined(ARDUINO_FEATHER_ESP32) // Feather Huzzah32
   #define TFT_CS         14
@@ -45,7 +41,7 @@
   #define TFT_SCLK      18    // Clock out  #define 
   #define TFT_RST       5     // Or set to -1 and connect to Arduino RESET pin                                            
   #define TFT_DC        10
-  #define TFT_CS        9
+  #define TFT_BL        9
   #define BUTTON_PIN    4
   #define VAL_MCU       "ESP32 Pico D4"
   #include "bat_stat.h"
