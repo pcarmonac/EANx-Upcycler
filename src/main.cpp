@@ -138,8 +138,8 @@ void printLayout() {
   tft.drawCentreString("O2 %", TFT_WIDTH * .50, TFT_HEIGHT * .01, 4);
   tft.setTextColor(TFT_BLUE, TFT_BLACK);
   tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
-  tft.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.drawString("MOD", TFT_WIDTH * .60, TFT_HEIGHT * .6, 2);
+  tft.setTextColor(TFT_ORANGE, TFT_BLACK);
+  tft.drawString("MOD@1.4", TFT_WIDTH * .50, TFT_HEIGHT * .6, 2);
 }
 
 void testfillcircles(uint8_t radius, uint16_t color) {
@@ -197,7 +197,8 @@ void setup() {
   debugln("Pinmode Init");
 
   //setup TFT
-  tft.init();
+  tft.begin();
+  //tft.init();  // TFT Init causes crashes in TTGO ESP32 C3 with eSPI driver ^2.4.79
   debugln("TFT Init");
   tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
@@ -213,10 +214,12 @@ void setup() {
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
-  tft.drawCentreString("display", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
-  tft.drawCentreString("init", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
-  tft.drawCentreString("complete", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
-  delay(500);
+  tft.drawCentreString("init", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
+  tft.drawCentreString("complete", TFT_WIDTH * .5, TFT_HEIGHT * 0.2, 4);
+  tft.setTextSize(1);
+  tft.drawCentreString(MODEL, TFT_WIDTH * .5, TFT_HEIGHT * 0.45, 4);
+  tft.drawCentreString(VERSION, TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+  delay(3000);
   tft.fillScreen(TFT_BLACK);
 
   // setup display and calibrate unit
@@ -294,24 +297,30 @@ void loop() {
     if (currentO2 < 20) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (currentO2 > 22) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
 
-    // Draw Text -- Adjust these layouts to suit you LCD
+    // Draw Text Layout -- Adjust these layouts to suit you LCD
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
     tft.drawCentreString(o2, TFT_WIDTH * .5, TFT_HEIGHT * .2, 7);
     tft.setTextColor(TFT_RED, TFT_BLACK);
+    if (mVolts > 6.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (mVolts < 6.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
+    if (mVolts > 9.0) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
     String mv = String(mVolts, 1);
-    tft.drawString(String(mv + " mV  "), TFT_WIDTH * .1, TFT_HEIGHT * .72, 2);
+    tft.drawString(String(mv + " mV  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .72, 2);
+    if (batVolts > 3.6 and batVolts < 3.8) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (batVolts < 3.6) { tft.setTextColor(TFT_RED, TFT_BLACK); }
+    if (batVolts > 3.8) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
     String bv = String(batVolts, 1);
-    tft.drawString(String(bv + " V  "), TFT_WIDTH * .1, TFT_HEIGHT * .83, 2);
+    tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .83, 2);
     tft.setTextSize(1);
-    tft.setTextColor(TFT_BROWN, TFT_BLACK);
-    tft.drawCentreString(String(millis() / 1000), TFT_WIDTH * .5, TFT_HEIGHT * .90, 2);
+    tft.setTextColor(TFT_RED, TFT_BLACK);
+    tft.drawCentreString(String(millis() / 1000), TFT_WIDTH * 0.45, TFT_HEIGHT * .90, 2);
     tft.setTextSize(1 * ResFact);
-    tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+    tft.setTextColor(TFT_WHITE, TFT_BLACK);
     String modf = String(modfsw);
-    tft.drawString(String(modf + " FT  "), TFT_WIDTH * .6, TFT_HEIGHT * .72, 2);
+    tft.drawString(String(modf + " FT  "), TFT_WIDTH * .55, TFT_HEIGHT * .72, 2);
     String modm = String(modmsw);
-    tft.drawString(String(modm + " m  "), TFT_WIDTH * .6, TFT_HEIGHT * .83, 2);
+    tft.drawString(String(modm + " m  "), TFT_WIDTH * .55, TFT_HEIGHT * .83, 2);
 
   }
 }
