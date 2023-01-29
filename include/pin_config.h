@@ -45,7 +45,7 @@
   #define BUTTON_PIN    4
   #define VAL_MCU       "ESP32 Pico D4"
   #include "bat_stat.h"
-  #define BAT_ADJ       1.0
+  #define BAT_ADJ       4.0
 
 #elif defined(ARDUINO_AVR_NANO)
   #define TFT_SDA       23     

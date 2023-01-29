@@ -69,9 +69,12 @@ const int buttonPin = BUTTON_PIN;  // push button
 float batStat();
 
 void BatGauge(int locX, int locY, float batV) {
-  tft.drawRect (locX, locY, 25, 12, TFT_WHITE);
+  // Draw the outline and clear the box
+  tft.drawRect (locX, locY, 25, 12, TFT_WHITE); 
   tft.drawRect ((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
+  tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_BLACK); 
   
+  // Fill with the color that matches the charge state 
   if (batV > 3.6 and batV < 3.8) { tft.fillRect ((locX +1), (locY +1), 15, 10, TFT_YELLOW); }
   if (batV < 3.6) { tft.fillRect ((locX +1), (locY +1), 10, 10, TFT_RED); }
   if (batV > 3.8) { tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_GREEN); }
@@ -210,8 +213,8 @@ void setup() {
   debugln("Pinmode Init");
 
   //setup TFT
-  tft.begin();
-  //tft.init();  // TFT Init causes crashes in TTGO ESP32 C3 with eSPI driver ^2.4.79
+  //tft.begin();
+  tft.init();  // TFT Init causes crashes in TTGO ESP32 C3 with eSPI driver ^2.4.79
   debugln("TFT Init");
   tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
