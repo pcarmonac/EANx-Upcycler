@@ -56,7 +56,10 @@ float currentO2 = 0;
 float calFactor = 1;
 int modfsw = 0;
 int modmsw = 0;
+int modmaxfsw = 0;
+int modmaxmsw = 0;
 float modppo = 1.4;
+float modmaxppo = 1.6;
 float multiplier = 0;
 int msgid = 0;
 
@@ -64,6 +67,15 @@ const int buttonPin = BUTTON_PIN;  // push button
 
 //Functions
 float batStat();
+
+void BatGauge(int locX, int locY, float batV) {
+  tft.drawRect (locX, locY, 25, 12, TFT_WHITE);
+  tft.drawRect ((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
+  
+  if (batV > 3.6 and batV < 3.8) { tft.fillRect ((locX +1), (locY +1), 15, 10, TFT_YELLOW); }
+  if (batV < 3.6) { tft.fillRect ((locX +1), (locY +1), 10, 10, TFT_RED); }
+  if (batV > 3.8) { tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_GREEN); }
+}
 
 float initADC() {
   // init ADC and Set gain
@@ -136,10 +148,11 @@ void printLayout() {
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
   tft.drawCentreString("O2 %", TFT_WIDTH * .50, TFT_HEIGHT * .01, 4);
-  tft.setTextColor(TFT_BLUE, TFT_BLACK);
-  tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
+  //tft.setTextColor(TFT_GREY, TFT_BLACK);
+  //tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawString("MOD@1.4", TFT_WIDTH * .50, TFT_HEIGHT * .6, 2);
+  tft.drawString("MOD @1.4", TFT_WIDTH * 0, TFT_HEIGHT * .60, 2);
+  tft.drawString("@1.6", TFT_WIDTH * .65, TFT_HEIGHT * .60, 2);
 }
 
 void testfillcircles(uint8_t radius, uint16_t color) {
@@ -166,23 +179,23 @@ void safetyrule() {
   int randNumber = random(5);
   if (randNumber == 0) {
     tft.drawCentreString("Seek proper", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("training", TFT_WIDTH * .5, TFT_HEIGHT * .20, 2);
+    tft.drawCentreString("training", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
   } else if (randNumber == 1) {
     tft.drawCentreString("Maintain a", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("continious", TFT_WIDTH * .5, TFT_HEIGHT * .20, 2);
-    tft.drawCentreString("guideline to", TFT_WIDTH * .5, TFT_HEIGHT * .30, 2);
-    tft.drawCentreString("the surface", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
+    tft.drawCentreString("continious", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
+    tft.drawCentreString("guideline to", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
+    tft.drawCentreString("the surface", TFT_WIDTH * .5, TFT_HEIGHT * .55, 2);
   } else if (randNumber == 2) {
     tft.drawCentreString("Stay within", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("your depth", TFT_WIDTH * .5, TFT_HEIGHT * .20, 2);
-    tft.drawCentreString("limitations", TFT_WIDTH * .5, TFT_HEIGHT * .30, 2);
+    tft.drawCentreString("your depth", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
+    tft.drawCentreString("limitations", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
   } else if (randNumber == 3) {
     tft.drawCentreString("Proper gas", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("management", TFT_WIDTH * .5, TFT_HEIGHT * .20, 2);
+    tft.drawCentreString("management", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
   } else {
     tft.drawCentreString("Use appropriate", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("properly maintaned", TFT_WIDTH * .5, TFT_HEIGHT * .20, 2);
-    tft.drawCentreString("equipment", TFT_WIDTH * .5, TFT_HEIGHT * .30, 2);
+    tft.drawCentreString("properly maintaned", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
+    tft.drawCentreString("equipment", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
   }
   delay(3000);
   tft.fillScreen(TFT_BLACK);
@@ -270,8 +283,8 @@ void loop() {
   
   modfsw = 33 * ((modppo / (currentO2 / 100)) - 1);
   modmsw = 10 * ((modppo / (currentO2 / 100)) - 1);
-
-
+  modmaxfsw = 33 * ((modmaxppo / (currentO2 / 100)) - 1);
+  modmaxmsw = 10 * ((modmaxppo / (currentO2 / 100)) - 1);
   // DEBUG print out the value you read:
   msgid++;  
   debug("Msg_ID:");
@@ -290,7 +303,10 @@ void loop() {
   debug(currentO2);
   debug("\t");
   debug("MOD:");
-  debugln(modfsw);
+  debug(modfsw);
+  debug("\t");
+  debug("MAX_MOD:");
+  debugln(modmaxfsw);
 
   if (prevO2 != currentO2) {
     if (currentO2 > 20 and currentO2 < 22) { tft.setTextColor(TFT_CYAN, TFT_BLACK); }
@@ -301,26 +317,28 @@ void loop() {
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
     tft.drawCentreString(o2, TFT_WIDTH * .5, TFT_HEIGHT * .2, 7);
-    tft.setTextColor(TFT_RED, TFT_BLACK);
-    if (mVolts > 6.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
-    if (mVolts < 6.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
+    // String bv = String(batVolts, 1);
+    //tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .83, 2);
+    BatGauge((TFT_WIDTH * .05), (TFT_HEIGHT * .05), (batVolts));
+    tft.setTextSize(1);
+    if (mVolts > 5.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (mVolts < 5.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (mVolts > 9.0) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
     String mv = String(mVolts, 1);
-    tft.drawString(String(mv + " mV  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .72, 2);
-    if (batVolts > 3.6 and batVolts < 3.8) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
-    if (batVolts < 3.6) { tft.setTextColor(TFT_RED, TFT_BLACK); }
-    if (batVolts > 3.8) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
-    String bv = String(batVolts, 1);
-    tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .83, 2);
-    tft.setTextSize(1);
+    tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.8, TFT_HEIGHT * .1, 2);
     tft.setTextColor(TFT_RED, TFT_BLACK);
-    tft.drawCentreString(String(millis() / 1000), TFT_WIDTH * 0.45, TFT_HEIGHT * .90, 2);
+    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.8, TFT_HEIGHT * .0, 2);
     tft.setTextSize(1 * ResFact);
-    tft.setTextColor(TFT_WHITE, TFT_BLACK);
+    tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
     String modf = String(modfsw);
-    tft.drawString(String(modf + " FT  "), TFT_WIDTH * .55, TFT_HEIGHT * .72, 2);
+    tft.drawString(String(modf + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * .72, 2);
     String modm = String(modmsw);
-    tft.drawString(String(modm + " m  "), TFT_WIDTH * .55, TFT_HEIGHT * .83, 2);
+    tft.drawString(String(modm + "-m  "), TFT_WIDTH * .05, TFT_HEIGHT * .83, 2);
+    tft.setTextColor(TFT_RED, TFT_BLACK);
+    String modmaxf = String(modmaxfsw);
+    tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * .6, TFT_HEIGHT * .72, 2);
+    String modmaxm = String(modmaxmsw);
+    tft.drawString(String(modmaxm + "-m  "), TFT_WIDTH * .65, TFT_HEIGHT * .83, 2);
 
   }
 }
