@@ -205,16 +205,18 @@ void safetyrule() {
 }
 
 void setup() {
+
   Serial.begin(115200);
   // Call our validation to output the message (could be to screen / web page etc)
   printVersionToSerial();
+
+  debugln("Wifi Manager Startup");
 
   pinMode(buttonPin, INPUT_PULLUP);
   debugln("Pinmode Init");
 
   //setup TFT
-  //tft.begin();
-  tft.init();  // TFT Init causes crashes in TTGO ESP32 C3 with eSPI driver ^2.4.79
+  tft.init();  
   debugln("TFT Init");
   tft.setRotation(0);
   tft.fillScreen(TFT_BLACK);
@@ -250,7 +252,7 @@ void setup() {
 void loop() {
 
   multiplier = initADC();
-
+  
   int bstate = digitalRead(buttonPin);
   // debugln(bstate);
   if (bstate == LOW) {
