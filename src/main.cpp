@@ -37,6 +37,7 @@
 #define TFT_WIDTH 240   // OLED display width, in pixels
 #define TFT_HEIGHT 240  // OLED display height, in pixels
 #define ResFact 2       // 1 = 128x128   2 = 240x240
+#define LEDROT 0 // 0 = default, 1 = CW 90 
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -154,8 +155,7 @@ void printLayout() {
   //tft.setTextColor(TFT_GREY, TFT_BLACK);
   //tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawString("MOD @1.4", TFT_WIDTH * 0, TFT_HEIGHT * .60, 2);
-  tft.drawString("@1.6", TFT_WIDTH * .65, TFT_HEIGHT * .60, 2);
+  tft.drawCentreString("@1,4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * .60, 2);
 }
 
 void testfillcircles(uint8_t radius, uint16_t color) {
@@ -218,7 +218,7 @@ void setup() {
   //setup TFT
   tft.init();  
   debugln("TFT Init");
-  tft.setRotation(0);
+  tft.setRotation(LEDROT);
   tft.fillScreen(TFT_BLACK);
 
   debugln("Display Initialized");

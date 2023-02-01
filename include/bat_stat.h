@@ -5,7 +5,9 @@
 #include <Arduino.h>
 #include "esp_adc_cal.h"
 
-#define BAT_ADC    2
+#define BAT_ADC       2  // General Batt ADC
+//#define BAT_ADC       4  // TTGO T-Display S3
+
 
 float BatVoltage = 0.0;
 uint32_t readADC_Cal(int ADC_Raw);
