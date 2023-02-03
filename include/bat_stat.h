@@ -7,6 +7,7 @@
 
 #define BAT_ADC       2  // General Batt ADC
 //#define BAT_ADC       4  // TTGO T-Display S3
+//#define BAT_ADC       10  // UM Tiny S3
 
 
 float BatVoltage = 0.0;

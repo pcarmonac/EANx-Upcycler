@@ -65,8 +65,8 @@
   #define TFT_MOSI      35    // Data out
   #define TFT_SCLK      36    // Clock out  #define 
   #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin                                            
-  #define TFT_DC        3
-  #define TFT_CS        34
+  #define TFT_DC        34
+  #define TFT_CS        3
   #define BUTTON_PIN    4
   #define VAL_MCU       "UM Tiny S3 ESP32"
   #include "bat_stat.h"
