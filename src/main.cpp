@@ -21,11 +21,12 @@
 #include <Adafruit_ADS1X15.h>
 #include "pin_config.h"
 #include "version.h"
+#include "ElegantOTA.h"
 
 //Debugging
 #define DEBUG 1
 
-#if DEBUG == 0
+#if DEBUG == 1
   #define debug(x) Serial.print(x)
   #define debugln(x) Serial.println(x)
 #else
@@ -37,7 +38,7 @@
 #define TFT_WIDTH 240   // OLED display width, in pixels
 #define TFT_HEIGHT 240  // OLED display height, in pixels
 #define ResFact 2       // 1 = 128x128   2 = 240x240
-#define LEDROT 0 // 0 = default, 1 = CW 90 
+#define LCDROT 0 // 0 = default, 1 = CW 90 
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -210,15 +211,13 @@ void setup() {
   // Call our validation to output the message (could be to screen / web page etc)
   printVersionToSerial();
 
-  debugln("Wifi Manager Startup");
-
   pinMode(buttonPin, INPUT_PULLUP);
   debugln("Pinmode Init");
 
   //setup TFT
   tft.init();  
   debugln("TFT Init");
-  tft.setRotation(LEDROT);
+  tft.setRotation(LCDROT);
   tft.fillScreen(TFT_BLACK);
 
   debugln("Display Initialized");
@@ -228,15 +227,20 @@ void setup() {
   testdrawcircles(5, TFT_WHITE);
   delay(500);
 
+  ElOTA();
+  debugln("OTA Startup");
+  
   tft.fillScreen(TFT_GREEN);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
   tft.drawCentreString("init", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
   tft.drawCentreString("complete", TFT_WIDTH * .5, TFT_HEIGHT * 0.2, 4);
-  tft.setTextSize(1);
+  tft.setTextSize(1);  
   tft.drawCentreString(MODEL, TFT_WIDTH * .5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+  tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * .5, TFT_HEIGHT * 0.75, 4);
+  Serial.println(WiFi.localIP());
   delay(3000);
   tft.fillScreen(TFT_BLACK);
 
