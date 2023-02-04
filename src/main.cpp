@@ -25,7 +25,7 @@
 //Debugging
 #define DEBUG 1
 
-#if DEBUG == 1
+#if DEBUG == 0
   #define debug(x) Serial.print(x)
   #define debugln(x) Serial.println(x)
 #else
@@ -324,15 +324,15 @@ void loop() {
     tft.drawCentreString(o2, TFT_WIDTH * .5, TFT_HEIGHT * .2, 7);
     // String bv = String(batVolts, 1);
     //tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .83, 2);
-    BatGauge((TFT_WIDTH * .05), (TFT_HEIGHT * .05), (batVolts));
+    BatGauge((TFT_WIDTH * .80), (TFT_HEIGHT * .05), (batVolts));
     tft.setTextSize(1);
     if (mVolts > 5.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (mVolts < 5.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (mVolts > 9.0) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
     String mv = String(mVolts, 1);
-    tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.8, TFT_HEIGHT * .1, 2);
+    tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * .1, 2);
     tft.setTextColor(TFT_RED, TFT_BLACK);
-    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.8, TFT_HEIGHT * .0, 2);
+    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * .0, 2);
     tft.setTextSize(1 * ResFact);
     tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
     String modf = String(modfsw);
