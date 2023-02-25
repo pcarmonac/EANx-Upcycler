@@ -101,12 +101,13 @@ float initADC() {
 
   // Check that the ADC is operational
   if (!ads.begin()) {
-    debugln("Failed to initialize ADS.");
+    debugln("Failed to initialize ADC.");
     tft.fillScreen(TFT_YELLOW);
     tft.setTextColor(TFT_RED);
     tft.setTextSize(1 * ResFact);
     tft.drawCentreString("Error", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
-    tft.drawCentreString("No ADC", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("ADC", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("Fail", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
     delay(5000);
     while (1)
       ;
@@ -227,6 +228,7 @@ void setup() {
   testdrawcircles(5, TFT_WHITE);
   delay(500);
 
+  //Startup Elegant OTA
   ElOTA();
   debugln("OTA Startup");
   
@@ -240,6 +242,7 @@ void setup() {
   tft.drawCentreString(MODEL, TFT_WIDTH * .5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
   tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * .5, TFT_HEIGHT * 0.75, 4);
+  tft.drawCentreString(PROTO, TFT_WIDTH * .5, TFT_HEIGHT * 0.9, 4);
   Serial.println(WiFi.localIP());
   delay(3000);
   tft.fillScreen(TFT_BLACK);
