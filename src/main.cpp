@@ -82,6 +82,17 @@ void BatGauge(int locX, int locY, float batV) {
   if (batV > 3.8) { tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_GREEN); }
 }
 
+void SenseCheck() {
+    debugln("Low mV reading from Sensor");
+    tft.fillScreen(TFT_YELLOW);
+    tft.setTextColor(TFT_RED);
+    tft.setTextSize(1 * ResFact);
+    tft.drawCentreString("Error", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
+    tft.drawCentreString("Sensor mV", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("LOW", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+    delay(5000);
+}
+
 float initADC() {
   // init ADC and Set gain
 
@@ -336,6 +347,7 @@ void loop() {
     if (mVolts > 5.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (mVolts < 5.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (mVolts > 9.0) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
+    if (mVolts < 4.0) { SenseCheck(); }
     String mv = String(mVolts, 1);
     tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * .1, 2);
     tft.setTextColor(TFT_RED, TFT_BLACK);
