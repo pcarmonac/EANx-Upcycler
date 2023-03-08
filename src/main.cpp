@@ -90,6 +90,8 @@ void SenseCheck() {
     tft.drawCentreString("Error", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
     tft.drawCentreString("Sensor mV", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
     tft.drawCentreString("LOW", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+    tft.setTextSize(1);
+    tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
     delay(5000);
 }
 
@@ -162,9 +164,12 @@ void o2calibration() {
 
 // Draw Layout -- Adjust this layouts to suit you LCD
 void printLayout() {
+  tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
   tft.setTextSize(1 * ResFact);
-  tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
-  tft.drawCentreString("O2 %", TFT_WIDTH * .50, TFT_HEIGHT * .01, 4);
+  tft.drawCentreString("O %", TFT_WIDTH * .50, TFT_HEIGHT * .01, 4);
+  tft.setTextSize(1);
+  tft.drawCentreString("2", TFT_WIDTH * .50, TFT_HEIGHT * .1, 4);
+    tft.setTextSize(1 * ResFact);
   //tft.setTextColor(TFT_GREY, TFT_BLACK);
   //tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
@@ -358,7 +363,7 @@ void loop() {
     tft.drawString(String(modf + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * .72, 2);
     String modm = String(modmsw);
     tft.drawString(String(modm + "-m  "), TFT_WIDTH * .05, TFT_HEIGHT * .83, 2);
-    tft.setTextColor(TFT_RED, TFT_BLACK);
+    tft.setTextColor(TFT_YELLOW, TFT_BLACK);
     String modmaxf = String(modmaxfsw);
     tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * .6, TFT_HEIGHT * .72, 2);
     String modmaxm = String(modmaxmsw);
