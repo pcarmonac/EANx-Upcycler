@@ -87,9 +87,9 @@ void SenseCheck() {
     tft.fillScreen(TFT_YELLOW);
     tft.setTextColor(TFT_RED);
     tft.setTextSize(1 * ResFact);
-    tft.drawCentreString("Error", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
-    tft.drawCentreString("Sensor mV", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
-    tft.drawCentreString("LOW", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
+    tft.drawCentreString("Sensor mV", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
     tft.setTextSize(1);
     tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
     delay(5000);
@@ -118,9 +118,9 @@ float initADC() {
     tft.fillScreen(TFT_YELLOW);
     tft.setTextColor(TFT_RED);
     tft.setTextSize(1 * ResFact);
-    tft.drawCentreString("Error", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
-    tft.drawCentreString("ADC", TFT_WIDTH * .5, TFT_HEIGHT * 0.3, 4);
-    tft.drawCentreString("Fail", TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
+    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
+    tft.drawCentreString("ADC", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("Fail", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
     delay(5000);
     while (1)
       ;
@@ -133,10 +133,10 @@ void o2calibration() {
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE);
   tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("+++++++++++++", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-  tft.drawCentreString("Calibrating", TFT_WIDTH * .5, TFT_HEIGHT * .30, 2);
-  tft.drawCentreString("O2 Sensor", TFT_WIDTH * .5, TFT_HEIGHT * .60, 2);
-  tft.drawCentreString("+++++++++++++", TFT_WIDTH * .5, TFT_HEIGHT * .80, 2);
+  tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+  tft.drawCentreString("Calibrating", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 2);
+  tft.drawCentreString("O2 Sensor", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
+  tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.8, 2);
   debugln("Calibration Screen Text");
 
   initADC();
@@ -166,14 +166,14 @@ void o2calibration() {
 void printLayout() {
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
   tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("O %", TFT_WIDTH * .50, TFT_HEIGHT * .01, 4);
+  tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT *  0, 4);
   tft.setTextSize(1);
-  tft.drawCentreString("2", TFT_WIDTH * .50, TFT_HEIGHT * .1, 4);
+  tft.drawCentreString("2", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
     tft.setTextSize(1 * ResFact);
   //tft.setTextColor(TFT_GREY, TFT_BLACK);
-  //tft.drawString("Info", TFT_WIDTH * .10, TFT_HEIGHT * .6, 2);
+  //tft.drawString("Info", TFT_WIDTH * 0.10, TFT_HEIGHT * 0.60, 2);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawCentreString("@1,4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * .60, 2);
+  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
 }
 
 void testfillcircles(uint8_t radius, uint16_t color) {
@@ -199,24 +199,24 @@ void safetyrule() {
   randomSeed(millis());
   int randNumber = random(5);
   if (randNumber == 0) {
-    tft.drawCentreString("Seek proper", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("training", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
+    tft.drawCentreString("Seek proper", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("training", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
   } else if (randNumber == 1) {
-    tft.drawCentreString("Maintain a", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("continious", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
-    tft.drawCentreString("guideline to", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
-    tft.drawCentreString("the surface", TFT_WIDTH * .5, TFT_HEIGHT * .55, 2);
+    tft.drawCentreString("Maintain a", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("continious", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
+    tft.drawCentreString("guideline to", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 2);
+    tft.drawCentreString("the surface", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.55, 2);
   } else if (randNumber == 2) {
-    tft.drawCentreString("Stay within", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("your depth", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
-    tft.drawCentreString("limitations", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
+    tft.drawCentreString("Stay within", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("your depth", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
+    tft.drawCentreString("limitations", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 2);
   } else if (randNumber == 3) {
-    tft.drawCentreString("Proper gas", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("management", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
+    tft.drawCentreString("Proper gas", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("management", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
   } else {
-    tft.drawCentreString("Use appropriate", TFT_WIDTH * .5, TFT_HEIGHT * .10, 2);
-    tft.drawCentreString("properly maintaned", TFT_WIDTH * .5, TFT_HEIGHT * .25, 2);
-    tft.drawCentreString("equipment", TFT_WIDTH * .5, TFT_HEIGHT * .40, 2);
+    tft.drawCentreString("Use appropriate", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("properly maintaned", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
+    tft.drawCentreString("equipment", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 2);
   }
   delay(3000);
   tft.fillScreen(TFT_BLACK);
@@ -252,13 +252,13 @@ void setup() {
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
-  tft.drawCentreString("init", TFT_WIDTH * .5, TFT_HEIGHT * 0, 4);
-  tft.drawCentreString("complete", TFT_WIDTH * .5, TFT_HEIGHT * 0.2, 4);
+  tft.drawCentreString("init", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
+  tft.drawCentreString("complete", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.2, 4);
   tft.setTextSize(1);  
-  tft.drawCentreString(MODEL, TFT_WIDTH * .5, TFT_HEIGHT * 0.45, 4);
-  tft.drawCentreString(VERSION, TFT_WIDTH * .5, TFT_HEIGHT * 0.6, 4);
-  tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * .5, TFT_HEIGHT * 0.75, 4);
-  tft.drawCentreString(PROTO, TFT_WIDTH * .5, TFT_HEIGHT * 0.9, 4);
+  tft.drawCentreString(MODEL, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 4);
+  tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+  tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
+  tft.drawCentreString(PROTO, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
   Serial.println(WiFi.localIP());
   delay(3000);
   tft.fillScreen(TFT_BLACK);
@@ -344,30 +344,30 @@ void loop() {
     // Draw Text Layout -- Adjust these layouts to suit you LCD
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
-    tft.drawCentreString(o2, TFT_WIDTH * .5, TFT_HEIGHT * .2, 7);
+    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.2, 7);
     // String bv = String(batVolts, 1);
-    //tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * .83, 2);
-    BatGauge((TFT_WIDTH * .80), (TFT_HEIGHT * .05), (batVolts));
+    //tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
+    BatGauge((TFT_WIDTH * 0.8), (TFT_HEIGHT * 0.05), (batVolts));
     tft.setTextSize(1);
     if (mVolts > 5.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (mVolts < 5.0) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (mVolts > 9.0) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
     if (mVolts < 4.0) { SenseCheck(); }
     String mv = String(mVolts, 1);
-    tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * .1, 2);
+    tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.1, 2);
     tft.setTextColor(TFT_RED, TFT_BLACK);
-    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * .0, 2);
+    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1 * ResFact);
     tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
     String modf = String(modfsw);
-    tft.drawString(String(modf + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * .72, 2);
+    tft.drawString(String(modf + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.72, 2);
     String modm = String(modmsw);
-    tft.drawString(String(modm + "-m  "), TFT_WIDTH * .05, TFT_HEIGHT * .83, 2);
-    tft.setTextColor(TFT_YELLOW, TFT_BLACK);
+    tft.drawString(String(modm + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
+    tft.setTextColor(TFT_PINK, TFT_BLACK);
     String modmaxf = String(modmaxfsw);
-    tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * .6, TFT_HEIGHT * .72, 2);
+    tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.72, 2);
     String modmaxm = String(modmaxmsw);
-    tft.drawString(String(modmaxm + "-m  "), TFT_WIDTH * .65, TFT_HEIGHT * .83, 2);
+    tft.drawString(String(modmaxm + "-m  "), TFT_WIDTH * 0.65, TFT_HEIGHT * 0.83, 2);
 
   }
 }
