@@ -248,7 +248,7 @@ void setup() {
   ElOTA();
   debugln("OTA Startup");
   
-  tft.fillScreen(TFT_GREEN);
+  tft.fillScreen(TFT_GOLD);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
@@ -355,7 +355,7 @@ void loop() {
     if (mVolts < 4.0) { SenseCheck(); }
     String mv = String(mVolts, 1);
     tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.1, 2);
-    tft.setTextColor(TFT_RED, TFT_BLACK);
+    tft.setTextColor(TFT_LIGHTGREY, TFT_BLACK);
     tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1 * ResFact);
     tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
@@ -363,7 +363,7 @@ void loop() {
     tft.drawString(String(modf + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.72, 2);
     String modm = String(modmsw);
     tft.drawString(String(modm + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
-    tft.setTextColor(TFT_PINK, TFT_BLACK);
+    tft.setTextColor(TFT_GOLD, TFT_BLACK);
     String modmaxf = String(modmaxfsw);
     tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.72, 2);
     String modmaxm = String(modmaxmsw);
