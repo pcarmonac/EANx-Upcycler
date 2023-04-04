@@ -56,6 +56,7 @@ float batVolts = 0;
 float prevO2 = 0;
 float currentO2 = 0;
 float calFactor = 1;
+float calErrChk = 1;
 int modfsw = 0;
 int modmsw = 0;
 int modmaxfsw = 0;
@@ -157,14 +158,47 @@ void o2calibration() {
 
   tft.fillScreen(TFT_BLACK);
   calFactor = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
+  
+  delay(1000); // Slow the loop for checksum
 
-  debug("calibrated ");
-  debugln(calFactor);  // average cal factor serial print for debugging
+  //Checksum on calibrate ... is the sensor still reseting from earlier read 
+    RA.clear();
+  for (int x = 0; x <= (RA_SIZE * 3); x++) {
+    int sensorValue = 0;
+    sensorValue = abs(ads.readADC_Differential_0_1());
+    RA.addValue(sensorValue);
+    delay(16);
+  }
+    debug("average calibration read ");
+    debugln(RA.getAverage());  // cal error factor serial print for debugging
+  calErrChk = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
+
+  debug("calibration raw values Calfactor=");
+  debug(calFactor);  // average cal factor serial print for debugging
+  debug(" CalErrChk=");
+  debugln(calErrChk);  // average cal err factor serial print for debugging
+
+  debugln(abs((1/calFactor) - (1/calErrChk))); 
+
+  if(abs((1/calFactor) - (1/calErrChk)) > 0.02) {
+    debugln("Calibration Failure");
+    tft.fillScreen(TFT_CYAN);
+    tft.setTextColor(TFT_RED);
+    tft.setTextSize(1 * ResFact);
+    tft.drawCentreString("Checksum", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.05, 4);
+    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("Reseting", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+    delay(5000);
+    ESP.restart();
+    while (1)
+      ;
+  }
+
 }
 
 // Draw Layout -- Adjust this layouts to suit you LCD
 void printLayout() {
-  tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
+  tft.setTextColor(TFT_GOLD, TFT_BLACK);  
   tft.setTextSize(1 * ResFact);
   tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT *  0, 4);
   tft.setTextSize(1);
@@ -248,7 +282,7 @@ void setup() {
   ElOTA();
   debugln("OTA Startup");
   
-  tft.fillScreen(TFT_GOLD);
+  tft.fillScreen(TFT_MAGENTA);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
