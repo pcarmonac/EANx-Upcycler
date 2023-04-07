@@ -5,10 +5,13 @@
 #include <Arduino.h>
 #include "esp_adc_cal.h"
 
-#define BAT_ADC       2  // General Batt ADC
-//#define BAT_ADC       4  // TTGO T-Display S3
-//#define BAT_ADC       10  // UM Tiny S3
-
+#if defined(ARDUINO_TINYS3)
+    #define BAT_ADC       10  // UM Tiny S3
+#elif defined(ARDUINO_XIAO_ESP32C3) 
+    #define BAT_ADC       1  // General Batt ADC
+#else  
+    #define BAT_ADC       2  // General Batt ADC
+#endif
 
 float BatVoltage = 0.0;
 uint32_t readADC_Cal(int ADC_Raw);

@@ -21,7 +21,9 @@
 #include <Adafruit_ADS1X15.h>
 #include "pin_config.h"
 #include "version.h"
-#include "ElegantOTA.h"
+#if defined(ESP32)  
+  #include "ElegantOTA.h"
+#endif
 
 //Debugging
 #define DEBUG 1
@@ -93,7 +95,7 @@ void SenseCheck() {
     tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
     tft.setTextSize(1);
     tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
-    delay(5000);
+    delay(30000);
 }
 
 float initADC() {
@@ -123,85 +125,86 @@ float initADC() {
     tft.drawCentreString("ADC", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
     tft.drawCentreString("Fail", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
     delay(5000);
-    while (1)
-      ;
+    while (1);
   }
   return (multiplier);
 }
 
 void o2calibration() {
-  //display "Calibrating"
-  tft.fillScreen(TFT_BLACK);
-  tft.setTextColor(TFT_WHITE);
-  tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
-  tft.drawCentreString("Calibrating", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 2);
-  tft.drawCentreString("O2 Sensor", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
-  tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.8, 2);
-  debugln("Calibration Screen Text");
-
-  initADC();
-
-  debugln("Post ADS check statement");
-  // get running average value from ADC input Pin
-  RA.clear();
-  for (int x = 0; x <= (RA_SIZE * 3); x++) {
-    int sensorValue = 0;
-    sensorValue = abs(ads.readADC_Differential_0_1());
-    RA.addValue(sensorValue);
-    delay(8);
-    // debug("calibrating ");
-    // debugln(sensorValue);  //raw sensor serial print for debugging
-  }
-  debug("average calibration read ");
-  debugln(RA.getAverage());  // average cal factor serial print for debugging
-
-  // calFactor = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
-  calFactor = RA.getAverage();
-  delay(1000); // Slow the loop for checksum
-
-  //Checksum on calibrate ... is the sensor still reseting from earlier read 
-    RA.clear();
-  for (int x = 0; x <= (RA_SIZE * 3); x++) {
-    int sensorValue = 0;
-    sensorValue = abs(ads.readADC_Differential_0_1());
-    RA.addValue(sensorValue);
-    delay(24);
-  }
-
-  tft.fillScreen(TFT_BLACK);
-
-  calErrChk = RA.getAverage();
-  debug("calibration raw values Calfactor=");
-  debug(calFactor);  // average cal factor
-  debug(" CalErrChk="); 
-  debugln(calErrChk);  // average cal err factor serial print for debugging
-
-  debugln(abs((calFactor / calErrChk) - 1)*100); 
-
-  // checking against a 0.15% error
-  if(abs((calFactor / calErrChk) - 1)*100 > 0.15) {  
-    debugln("Calibration Failure");
-    tft.fillScreen(TFT_CYAN);
-    tft.setTextColor(TFT_MAROON);
+  int cal = 1;
+  do {
+    //display "Calibrating"
+    tft.fillScreen(TFT_BLACK);
+    tft.setTextColor(TFT_WHITE);
     tft.setTextSize(1 * ResFact);
-    tft.drawCentreString("Calibrate", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.05, 4);
-    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 4);
-    tft.drawCentreString("Reseting", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.5, 4);
-    tft.drawCentreString(String(abs((calFactor / calErrChk) - 1)*100), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 2);
-    delay(5000);
-    ESP.restart();
-    while (1);
-  }
-  calFactor = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
+    tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+    tft.drawCentreString("Calibrating", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 2);
+    tft.drawCentreString("O2 Sensor", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
+    tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.8, 2);
+    debugln("Calibration Screen Text");
 
+    // get running average value from ADC input Pin
+    RA.clear();
+    for (int x = 0; x <= (RA_SIZE * 3); x++) {
+      int sensorValue = 0;
+      sensorValue = abs(ads.readADC_Differential_0_1());
+      RA.addValue(sensorValue);
+      delay(8);
+    }
+    debug("average calibration read ");
+    debugln(RA.getAverage());  // average cal factor serial print for debugging
+
+    calFactor = RA.getAverage();
+    delay(1000); // Slow the loop for checksum
+
+    //Checksum on calibrate ... is the sensor still reseting from earlier read 
+      RA.clear();
+    for (int x = 0; x <= (RA_SIZE * 3); x++) {
+      int sensorValue = 0;
+      sensorValue = abs(ads.readADC_Differential_0_1());
+      RA.addValue(sensorValue);
+      delay(24);
+    }
+
+    tft.fillScreen(TFT_BLACK);
+
+    calErrChk = RA.getAverage();
+    debug("calibration raw values Calfactor=");
+    debug(calFactor);  // average cal factor
+    debug(" CalErrChk="); 
+    debugln(calErrChk);  // average cal err factor serial print for debugging
+
+    debugln(abs((calFactor / calErrChk) - 1)*100); 
+
+    // checking against a 0.15% error
+    if(abs((calFactor / calErrChk) - 1)*100 > 0.15) {  
+      debugln("Calibration Checksum out of spec");
+      tft.fillScreen(TFT_DARKCYAN);
+      tft.setTextColor(TFT_BLACK);
+      tft.setTextSize(1 * ResFact);
+      tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
+      tft.drawCentreString("Refining", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.25, 2);
+      tft.drawCentreString("Calibration", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 2);
+      tft.drawCentreString("Standby", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.65, 2);
+      tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.80, 2);
+      tft.drawCentreString(String(abs((calFactor / calErrChk) - 1)*100), TFT_WIDTH * 0.85 , TFT_HEIGHT * 0.90, 1);
+      delay(5000);
+      cal = 1;
+    }
+    else  {
+      cal = 0;
+    }
+  }
+  while (cal);
+
+  calFactor = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
 }
 
 // Draw Layout -- Adjust this layouts to suit you LCD
 void printLayout() {
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
   tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT *  0, 4);
+  tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
   tft.setTextSize(1);
   tft.drawCentreString("2", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
     tft.setTextSize(1 * ResFact);
@@ -279,10 +282,13 @@ void setup() {
   testdrawcircles(5, TFT_WHITE);
   delay(500);
 
-  //Startup Elegant OTA
-  ElOTA();
-  debugln("OTA Startup");
-  
+
+  #if defined(ESP32)  
+    //Startup Elegant OTA
+    ElOTA();
+    debugln("OTA Startup");
+  #endif
+
   tft.fillScreen(TFT_GOLD);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
@@ -292,13 +298,17 @@ void setup() {
   tft.setTextSize(1);  
   tft.drawCentreString(MODEL, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
-  tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
-  tft.drawCentreString(PROTO, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
-  Serial.println(WiFi.localIP());
+  tft.drawCentreString(PROTO, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
+  #if defined(ESP32)  
+    tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
+    Serial.println(WiFi.localIP());
+  #endif
   delay(3000);
   tft.fillScreen(TFT_BLACK);
 
   // setup display and calibrate unit
+  initADC();
+  debugln("Post ADS check statement");
   o2calibration();
   safetyrule();
   printLayout();
@@ -403,6 +413,5 @@ void loop() {
     tft.drawString(String(modmaxf + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.72, 2);
     String modmaxm = String(modmaxmsw);
     tft.drawString(String(modmaxm + "-m  "), TFT_WIDTH * 0.65, TFT_HEIGHT * 0.83, 2);
-
   }
 }
