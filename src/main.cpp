@@ -40,7 +40,6 @@
 #define TFT_WIDTH 240   // OLED display width, in pixels
 #define TFT_HEIGHT 240  // OLED display height, in pixels
 #define ResFact 2       // 1 = 128x128   2 = 240x240
-#define LCDROT 0 // 0 = default, 1 = CW 90 
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -51,6 +50,7 @@ Adafruit_ADS1115 ads;  // Define ADC - 16-bit version
 RunningAverage RA(RA_SIZE);  //Initialize Running Average
 
 // Global Variables
+int LCDROT = 0; // 0 = default, 1 = CW 90 
 float prevaveSensorValue = 0;
 float aveSensorValue = 0;
 float mVolts = 0;
@@ -179,7 +179,7 @@ void o2calibration() {
     // checking against a 0.15% error
     if(abs((calFactor / calErrChk) - 1)*100 > 0.15) {  
       debugln("Calibration Checksum out of spec");
-      tft.fillScreen(TFT_DARKCYAN);
+      tft.fillScreen(TFT_CYAN);
       tft.setTextColor(TFT_BLACK);
       tft.setTextSize(1 * ResFact);
       tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
@@ -324,8 +324,14 @@ void loop() {
   int bstate = digitalRead(buttonPin);
   // debugln(bstate);
   if (bstate == LOW) {
-    o2calibration();
-    safetyrule();
+    if (LCDROT == 0) {
+      LCDROT = 2; 
+      }
+    else {
+      LCDROT = 0;
+    }
+    tft.setRotation(LCDROT);
+    tft.fillScreen(TFT_BLACK);
     printLayout();
   }
 
