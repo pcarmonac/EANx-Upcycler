@@ -72,6 +72,7 @@
   #define VAL_MCU       "TTGO T-OI PLUS RISC-V ESP32-C3"
   #include "bat_stat.h"
   #define BAT_ADJ       1.0
+  //#define OTA_UP        1 
   
 #else
   // For the breakout board, you can use any 2 or 3 pins.

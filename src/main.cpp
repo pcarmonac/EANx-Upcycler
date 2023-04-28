@@ -21,7 +21,7 @@
 #include <Adafruit_ADS1X15.h>
 #include "pin_config.h"
 #include "version.h"
-#if defined(ESP32)  
+#if defined(OTA_UP)  
   #include "ElegantOTA.h"
 #endif
 
@@ -80,9 +80,9 @@ void BatGauge(int locX, int locY, float batV) {
   tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_BLACK); 
   
   // Fill with the color that matches the charge state 
-  if (batV > 3.6 and batV < 3.8) { tft.fillRect ((locX +1), (locY +1), 15, 10, TFT_YELLOW); }
-  if (batV < 3.6) { tft.fillRect ((locX +1), (locY +1), 10, 10, TFT_RED); }
-  if (batV > 3.8) { tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_GREEN); }
+  if (batV > 3.4 and batV < 3.6) { tft.fillRect ((locX +1), (locY +1), 15, 10, TFT_YELLOW); }
+  if (batV < 3.4) { tft.fillRect ((locX +1), (locY +1), 10, 10, TFT_RED); }
+  if (batV > 3.6) { tft.fillRect ((locX +1), (locY +1), 23, 10, TFT_GREEN); }
 }
 
 void SenseCheck() {
@@ -95,9 +95,21 @@ void SenseCheck() {
     tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
     tft.setTextSize(1);
     tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
-    delay(30000);
+    delay(5000);
 }
-
+  
+void BattCheck() {
+    debugln("Low V reading from Battery");
+    tft.fillScreen(TFT_YELLOW);
+    tft.setTextColor(TFT_RED);
+    tft.setTextSize(1 * ResFact);
+    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
+    tft.drawCentreString("Battery", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
+    tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+    tft.setTextSize(1);
+    tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
+    delay(5000);
+}
 float initADC() {
   // init ADC and Set gain
 
@@ -283,7 +295,7 @@ void setup() {
   delay(500);
 
 
-  #if defined(ESP32)  
+  #if defined(OTA_UP)  
     //Startup Elegant OTA
     ElOTA();
     debugln("OTA Startup");
@@ -298,8 +310,7 @@ void setup() {
   tft.setTextSize(1);  
   tft.drawCentreString(MODEL, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
-  tft.drawCentreString(PROTO, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
-  #if defined(ESP32)  
+  #if defined(OTA_UP)  
     tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
     Serial.println(WiFi.localIP());
   #endif
@@ -389,15 +400,14 @@ void loop() {
 
   if (prevO2 != currentO2) {
     if (currentO2 > 20 and currentO2 < 22) { tft.setTextColor(TFT_CYAN, TFT_BLACK); }
-    if (currentO2 < 20) { tft.setTextColor(TFT_RED, TFT_BLACK); }
-    if (currentO2 > 22) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
+    if (currentO2 <= 20) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (currentO2 <= 18) { tft.setTextColor(TFT_RED, TFT_BLACK); }
+    if (currentO2 >= 22) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
 
     // Draw Text Layout -- Adjust these layouts to suit you LCD
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
     tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.2, 7);
-    // String bv = String(batVolts, 1);
-    //tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
     BatGauge((TFT_WIDTH * 0.8), (TFT_HEIGHT * 0.05), (batVolts));
     tft.setTextSize(1);
     if (mVolts > 5.0 and mVolts < 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
@@ -407,7 +417,13 @@ void loop() {
     String mv = String(mVolts, 1);
     tft.drawString(String(mv + " mV "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.1, 2);
     tft.setTextColor(TFT_LIGHTGREY, TFT_BLACK);
-    tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
+    if (batVolts > 3.4 and mVolts < 3.6) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (batVolts < 3.4) { tft.setTextColor(TFT_RED, TFT_BLACK); }
+    if (batVolts > 3.6) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
+    String bv = String(batVolts, 1);
+    if (batVolts < 3.2) { BattCheck(); }
+    tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
+    //tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1 * ResFact);
     tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
     String modf = String(modfsw);

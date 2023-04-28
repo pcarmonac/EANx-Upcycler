@@ -10,9 +10,8 @@
 
 //Software Definitions
 #define MODEL "EANx O2 Upcycler"
-#define VERSION "0.42 Beta"
+#define VERSION "0.44 Beta"
 #define FILE "EANx_Upcycler on Platform IO"
-#define PROTO "Proto 4"
 
 
 /*
@@ -60,9 +59,6 @@ void printVersionToSerial() {
 
     Serial.print(F("File:\t"));
     Serial.println(FILE);
-
-    Serial.print(F("Proto:\t"));
-    Serial.println(PROTO);
 
     Serial.println(F("---------------------------------------------------"));
 }
