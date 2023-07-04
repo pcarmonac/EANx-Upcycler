@@ -44,16 +44,14 @@
 
 // User Interface Settings
 #define GUI 1     // 1= on 0= off 
-#define metric 0  // 1= on 0= off 
+#define metric 0  // 1= on 0= off   Available sinde 1866 in the US 
 
 //Init tft and sprites
 TFT_eSPI tft = TFT_eSPI();
 
-
 TFT_eSprite gauge = TFT_eSprite(&tft);  
 TFT_eSprite background = TFT_eSprite(&tft);
 TFT_eSprite needle = TFT_eSprite(&tft);
-
 
 // Init ADS
 Adafruit_ADS1115 ads;  // Define ADC - 16-bit version
@@ -115,7 +113,6 @@ int msgid = 0;
   float nx[360]; //needle low of Speed gaouges
   float ny[360];
 #endif
-
 
 const int buttonPin = BUTTON_PIN;  // push button
 
@@ -261,76 +258,6 @@ void o2calibration() {
   calFactor = (1 / RA.getAverage() * 20.900);  // Auto Calibrate to 20.9%
 }
 
-
-void textBaseLayout() {
-  // Draw Layout -- Adjust this layouts to suit you LCD  
-  tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
-  tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
-  tft.setTextSize(1);
-  tft.drawCentreString("2", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
-  tft.setTextSize(1 * ResFact);
-  //tft.setTextColor(TFT_GREY, TFT_BLACK);
-  //tft.drawString("Info", TFT_WIDTH * 0.10, TFT_HEIGHT * 0.60, 2);
-  tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
-}
-
-#if GUI == 1
-  void gaugeBaseLayout() {
-    // Draw Layout -- Adjust this layouts to suit you LCD  
-    gauge.createSprite(240,100);
-    gauge.setSwapBytes(true);
-    gauge.setTextDatum(4);
-    gauge.setTextColor(TFT_WHITE,backColor);    
-    needle.createSprite(240,100);
-    needle.setSwapBytes(true);
-    background.createSprite(240,100);
-
-    background.fillSprite(TFT_BLACK);
-    
-    for(int i=0;i<360;i++) {
-        x[i]=((r-10)*cos(DEG2RAD*angle))+cx;
-        y[i]=((r-10)*sin(DEG2RAD*angle))+cy;
-        px[i]=((r-14)*cos(DEG2RAD*angle))+cx;
-        py[i]=((r-14)*sin(DEG2RAD*angle))+cy;
-        lx[i]=((r-24)*cos(DEG2RAD*angle))+cx;
-        ly[i]=((r-24)*sin(DEG2RAD*angle))+cy;
-        nx[i]=((r-36)*cos(DEG2RAD*angle))+cx;
-        ny[i]=((r-36)*sin(DEG2RAD*angle))+cy;
-
-        angle++;
-        if(angle==360)
-        angle=0;
-      }
-
-    gauge.drawSmoothArc(cx, cy, r, ir, 120, 240, gaugeColor, backColor);
-    gauge.drawSmoothArc(cx, cy, r-5, r-6, 120, 240, TFT_WHITE, backColor);
-    gauge.drawSmoothArc(cx, cy, r-9, r-8, 120, 140, TFT_RED, backColor);
-    gauge.drawSmoothArc(cx, cy, r-38, ir-37, 110, 250, gaugeColor, backColor);
-
-    //.....................................................draw GAUGES
-    for(int i=0;i<21;i++){
-      //if(i<2) {color1=TFT_RED; color2=TFT_RED;} else {color1=TFT_GREEN; color2=TFT_GREEN;}
-
-      if (i*5 <= 21) { color1=TFT_CYAN, color2=TFT_CYAN; }
-      if (i*5  <= 18) { color1=TFT_RED; color2=TFT_YELLOW; }
-      if (i*5  >= 22) { color1=TFT_GREEN; color2=TFT_GREEN; }
-      int wedginc = 6;
-      if(i%2==0) {
-      gauge.drawWedgeLine(x[i*wedginc],y[i*wedginc],px[i*wedginc],py[i*wedginc],2,1,color1);
-      gauge.setTextColor(color1,backColor);
-      gauge.drawString(String(i*5),lx[i*wedginc],ly[i*wedginc]);
-      } else
-      gauge.drawWedgeLine(x[i*wedginc],y[i*wedginc],px[i*wedginc],py[i*wedginc],1,1,color2);
-      }
-
-    gauge.pushSprite(0,40);
-
-
-  }
-#endif
-
 void testfillcircles(uint8_t radius, uint16_t color) {
   for (int16_t x = radius; x < tft.width(); x += radius * 2) {
     for (int16_t y = radius; y < tft.height(); y += radius * 2) {
@@ -394,6 +321,24 @@ void displayUtilData() {
     if (batVolts < 3.2) { BattCheck(); }
     tft.drawString(String(bv + " V  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     //tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
+    tft.setTextSize(1);
+    tft.setTextColor(TFT_LIGHTGREY);
+    tft.drawCentreString(String(VERSION), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.92, 2);
+}
+
+void textBaseLayout() {
+  // Draw Layout -- Adjust this layouts to suit you LCD  
+  tft.setTextColor(TFT_MAGENTA, TFT_BLACK);  
+  tft.setTextSize(1 * ResFact);
+  tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
+  tft.setTextSize(1);
+  tft.drawCentreString("2", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
+  tft.setTextSize(1 * ResFact);
+  //tft.setTextColor(TFT_GREY, TFT_BLACK);
+  //tft.drawString("Info", TFT_WIDTH * 0.10, TFT_HEIGHT * 0.60, 2);
+  tft.setTextColor(TFT_ORANGE, TFT_BLACK);
+  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
+  
 }
 
 void displayTextData() {
@@ -414,86 +359,125 @@ void displayTextData() {
     if (metric == 1)  {
       String mod14m = String(mod14msw);
       tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
-      tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.80, 2);
       tft.setTextColor(TFT_GOLD, TFT_BLACK);
       String mod16m = String(mod16msw);
-      tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.65, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.7, TFT_HEIGHT * 0.80, 2);
     }
     else {
       tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
       String mod14f = String(mod14fsw);
-      tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.72, 2);
+      tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.80, 2);
       tft.setTextColor(TFT_GOLD, TFT_BLACK);
       String mod16f = String(mod16fsw);
-      tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.72, 2);
+      tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.80, 2);
     }
 
   }
 }
 
 #if GUI == 1
+  void gaugeBaseLayout() {
+    // Draw Layout -- Adjust this layouts to suit you LCD  
+    gauge.createSprite(240,150);
+    gauge.setSwapBytes(true);
+    gauge.setTextDatum(4);
+    gauge.setTextColor(TFT_WHITE,backColor);    
+    needle.createSprite(240,150);
+    needle.setSwapBytes(true);
+    background.createSprite(240,150);
+
+    background.fillSprite(TFT_BLACK);
+    
+    for(int i=0;i<360;i++) {
+        x[i]=((r-10)*cos(DEG2RAD*angle))+cx;
+        y[i]=((r-10)*sin(DEG2RAD*angle))+cy;
+        px[i]=((r-14)*cos(DEG2RAD*angle))+cx;
+        py[i]=((r-14)*sin(DEG2RAD*angle))+cy;
+        lx[i]=((r-24)*cos(DEG2RAD*angle))+cx;
+        ly[i]=((r-24)*sin(DEG2RAD*angle))+cy;
+        nx[i]=((r-36)*cos(DEG2RAD*angle))+cx;
+        ny[i]=((r-36)*sin(DEG2RAD*angle))+cy;
+
+        angle++;
+        if(angle==360)
+        angle=0;
+      }
+
+    gauge.drawSmoothArc(cx, cy, r, ir, 120, 240, gaugeColor, backColor);
+    gauge.drawSmoothArc(cx, cy, r-5, r-6, 120, 240, TFT_WHITE, backColor);
+    gauge.drawSmoothArc(cx, cy, r-9, r-8, 120, 140, TFT_RED, backColor);
+    gauge.drawSmoothArc(cx, cy, r-38, ir-37, 120, 240, gaugeColor, backColor);
+
+    // Draw Gauge 
+    for(int i=0;i<21;i++){
+
+      if (i*5 <= 21) { color1=TFT_CYAN, color2=TFT_CYAN; }
+      if (i*5  <= 18) { color1=TFT_RED; color2=TFT_YELLOW; }
+      if (i*5  >= 22) { color1=TFT_GREEN; color2=TFT_GREEN; }
+      int wedginc = 6;
+      if(i%2==0) {
+      gauge.drawWedgeLine(x[i*wedginc],y[i*wedginc],px[i*wedginc],py[i*wedginc],2,1,color1);
+      gauge.setTextColor(color1,backColor);
+      gauge.drawString(String(i*5),lx[i*wedginc],ly[i*wedginc]);
+      } else
+      gauge.drawWedgeLine(x[i*wedginc],y[i*wedginc],px[i*wedginc],py[i*wedginc],1,1,color2);
+      }
+
+    gauge.setTextColor(TFT_ORANGE, TFT_BLACK);
+    gauge.setTextSize(1 * ResFact);
+    gauge.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH *.5, TFT_HEIGHT * 0.50, 2);
+    gauge.pushSprite(0,40);
+
+  }
+
   void  displayGaugeData() {
-
-  // Draw gauge needle
-  int sA=currentO2*1.2;
-  //int bA=prevO2;
-  //int sA=o2Angle;
-  //int bA=o2Angle -1;
-  //needle.drawWedgeLine(px[(int)bA],py[(int)bA],nx[(int)bA],ny[(int)bA],2,2,backColor);
-  //gauge.pushSprite(0,40,needleColor);
-  needle.drawWedgeLine(px[(int)sA],py[(int)sA],nx[(int)sA],ny[(int)sA],2,2,TFT_RED);
-
-  // o2Angle++;
-  // if(o2Angle==120) {
-  //   o2Angle=0; 
-  // }
-
-  gauge.pushToSprite(&background,0,0,TFT_BLACK);
-  needle.pushToSprite(&background,0,0,TFT_BLACK);
-
-  //gauge.pushSprite(0,40,TFT_BLACK);
-  // needle.pushSprite(0,40);
-  //delay(100);
-  background.pushSprite(0,40);
-  // gauge.pushSprite(0,40);  
-  //needle.deleteSprite();
-  //needle.fillSprite(TFT_BLACK);
-  needle.fillSprite(TFT_BLACK);
-  needle.pushToSprite(&background,0,0);
-
   // Text info
   if (prevO2 != currentO2) {
-    if (currentO2 > 20 and currentO2 < 22) { tft.setTextColor(TFT_CYAN, TFT_BLACK); }
-    if (currentO2 <= 20) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
-    if (currentO2 <= 18) { tft.setTextColor(TFT_RED, TFT_BLACK); }
-    if (currentO2 >= 22) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
+    if (currentO2 > 20 and currentO2 < 22) { gauge.setTextColor(TFT_CYAN, TFT_BLACK); }
+    if (currentO2 <= 20) { gauge.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (currentO2 <= 18) { gauge.setTextColor(TFT_RED, TFT_BLACK); }
+    if (currentO2 >= 22) { gauge.setTextColor(TFT_GREEN, TFT_BLACK); }
 
-    // Text info
-    tft.setTextSize(1 * ResFact);
+    gauge.setTextSize(1);
     String o2 = String(currentO2, 1);
-    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+    gauge.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.30, 7);
 
     tft.setTextSize(1 * ResFact);
 
     if (metric == 1)  {
       String mod14m = String(mod14msw);
       tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
-      tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.80, 2);
       tft.setTextColor(TFT_GOLD, TFT_BLACK);
       String mod16m = String(mod16msw);
-      tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.65, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.7, TFT_HEIGHT * 0.80, 2);
     }
     else {
       tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
       String mod14f = String(mod14fsw);
-      tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.80, 2);
       tft.setTextColor(TFT_GOLD, TFT_BLACK);
       String mod16f = String(mod16fsw);
-      tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.83, 2);
+      tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.80, 2);
     }
 
 
     }
+  // Draw gauge needle
+  int sA=currentO2*1.2;
+
+  needle.drawWedgeLine(px[(int)sA],py[(int)sA],nx[(int)sA],ny[(int)sA],2,2,TFT_RED);
+
+  gauge.pushToSprite(&background,0,0,TFT_BLACK);
+  needle.pushToSprite(&background,0,0,TFT_BLACK);
+
+
+  background.pushSprite(0,40);
+
+  needle.fillSprite(TFT_BLACK);
+  needle.pushToSprite(&background,0,0);
+
   }
 #endif
 
@@ -507,7 +491,6 @@ void setup() {
   debugln("Pinmode Init");
 
   //setup TFT
-   debugln("Pre TFT Init");
   tft.init();
   debugln("TFT Init");
   tft.setRotation(LCDROT);
@@ -543,7 +526,7 @@ void setup() {
   delay(1500);
   tft.fillScreen(TFT_BLACK);
 
-  // setup display and calibrate unit
+  // setup display and calibrate unit--------------------------------------------------------------------------------------------------------------
   initADC();
   debugln("Post ADS check statement");
   o2calibration();
