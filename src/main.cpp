@@ -323,7 +323,7 @@ void displayUtilData() {
     //tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1);
     tft.setTextColor(TFT_LIGHTGREY);
-    tft.drawCentreString(String(VERSION), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.92, 2);
+    tft.drawCentreString(String(VERSION), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.93, 2);
 }
 
 void textBaseLayout() {
