@@ -27,7 +27,7 @@
 #endif
 
 //Debugging
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG == 1
   #define debug(x) Serial.print(x)
@@ -43,7 +43,7 @@
 #define ResFact 2       // 1 = 128x128   2 = 240x240
 
 // User Interface Settings
-#define GUI 1     // 1= on 0= off 
+#define GUI 0     // 1= on 0= off 
 #define metric 0  // 1= on 0= off   Available sinde 1866 in the US 
 
 //Init tft and sprites
@@ -337,7 +337,7 @@ void textBaseLayout() {
   //tft.setTextColor(TFT_GREY, TFT_BLACK);
   //tft.drawString("Info", TFT_WIDTH * 0.10, TFT_HEIGHT * 0.60, 2);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 2);
+  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.65, 2);
   
 }
 
