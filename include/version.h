@@ -8,14 +8,13 @@
 #include "WProgram.h"
 #endif
 
-//Software Definitions
+// Software Definitions
 #define MODEL "EANx O2 Upcycler"
-#define VERSION "0.45 Beta"
+#define VERSION "0.46 Beta"
 #define FILE "EANx_Upcycler on Platform IO"
 
-
 /*
- * One Route is to Embed the Date and time from GCC 
+ * One Route is to Embed the Date and time from GCC
  * These Are dynamically replaced at build time so are dynamically embedded in your project without external tools
  * https ://gcc.gnu.org/onlinedocs/cpp/Standard-Predefined-Macros.html
  */
@@ -31,12 +30,12 @@
     #define VAL_MCU "AVR_ATmega328p"
 #elif defined (ARDUINO_ARCH_ESP32)
     #define VAL_MCU "ESP32"
-#else 
+#else
     #define VAL_MCU "Unknown"
 #endif */
 
-
-void printVersionToSerial() {
+void printVersionToSerial()
+{
     Serial.println(F("---------------------------------------------------"));
     Serial.println(F("Software Build"));
     Serial.println(F("---------------------------------------------------"));
