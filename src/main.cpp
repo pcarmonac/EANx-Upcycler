@@ -49,7 +49,7 @@
 #define metric 0   // 1= on 0= off   Available since 1866 in the US
 #define statinfo 1 // 2= bottom 1= top, 0= off
 #define MOD 1      // 1= on 0= off
-#define RODA 1     // 1= on 0= off
+#define RODA 0     // 1= on 0= off
 
 // Init tft and sprites
 TFT_eSPI tft = TFT_eSPI();
@@ -814,7 +814,7 @@ void setup()
   debugln("Post ADS check statement");
 
   o2calibration();
-#if defined(RODA)
+#if RODA == 1
   safetyrule();
 #endif
 
