@@ -65,5 +65,5 @@ The current prototype unit is built using:
 
 *Prototype 4*
 
-![Custom PCB version]([https://github.com/lbehrler/EANx-Analyzer-Arduino/blob/main/ProtoCustomPCB.jpg](https://photos.app.goo.gl/AsoPJx128nAhyt4y9)https://photos.app.goo.gl/AsoPJx128nAhyt4y9)
+![Custom PCB version](https://photos.app.goo.gl/iSi7PYW4sDniEZGBA)
 
