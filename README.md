@@ -65,5 +65,5 @@ The current prototype unit is built using:
 
 *Prototype 4*
 
-![Custom PCB version](https://photos.app.goo.gl/iSi7PYW4sDniEZGBA)
+![Custom PCB version](https://lh3.googleusercontent.com/pw/AIL4fc_xV2YWr-FOy9fTgCVv1qJvXfss7XXug2cmfTwabwHQb4MrrQRQn25uYb2qKOo2hIIW4s7WPj61GEHNv8foAk6tiZ7ztep2YEQh7d-Uges87c64GSATMVJgouoNBcy8N-WcfUyh_iExNov7f3sfYL7hUw=w525-h933-s-no?authuser=0)
 
