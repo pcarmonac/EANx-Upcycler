@@ -14,8 +14,8 @@
 #elif defined(ARDUINO_XIAO_ESP32C3)  // Seeed XIAO ESP32 C3
   #define SDA           6     
   #define SCL           7
-  #define TFT_CS        4
-  #define TFT_DC        5
+  #define TFT_CS        4  
+  #define TFT_DC        9 
   #define TFT_MOSI      10    // Data out
   #define TFT_SCLK      8     // Clock out  
   #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin 

@@ -44,11 +44,11 @@
 #define TFT_HEIGHT 240 // OLED display height, in pixels
 #define ResFact 2      // 1 = 128x128   2 = 240x240
 
-// User Interface Settings
-#define GUI 1      // 1= on 0= off
+// User Interface Settings -----------------------------------------------------------------
+#define GUI 0      // 1= on 0= off
 #define metric 0   // 1= on 0= off   Available since 1866 in the US
 #define statinfo 1 // 2= bottom 1= top, 0= off
-#define MOD 1      // 1= on 0= off
+#define MOD 0      // 1= on 0= off
 #define RODA 0     // 1= on 0= off
 
 // Init tft and sprites
@@ -57,7 +57,7 @@ TFT_eSPI tft = TFT_eSPI();
 TFT_eSprite gauge = TFT_eSprite(&tft);
 TFT_eSprite background = TFT_eSprite(&tft);
 TFT_eSprite needle = TFT_eSprite(&tft);
-
+  
 // Init ADS
 Adafruit_ADS1115 ads; // Define ADC - 16-bit version
 
@@ -477,7 +477,10 @@ void textBaseLayout()
   tft.drawCentreString("2", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_ORANGE, TFT_BLACK);
-  tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.62, 2);
+  if (MOD == 1)
+  {
+    tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.62, 2);
+  }
 }
 
 void displayTextData()
@@ -505,27 +508,34 @@ void displayTextData()
     // Draw Text Layout -- Adjust these layouts to suit you LCD
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
-    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.2, 7);
+    float h = 0.20;
+    if (MOD == 0)
+    {
+      h = 0.35;
+    }
+    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * h, 7);
 
     tft.setTextSize(1 * ResFact);
-
-    if (metric == 1)
+    if (MOD == 1)
     {
-      String mod14m = String(mod14msw);
-      tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
-      tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.75, 2);
-      tft.setTextColor(TFT_GOLD, TFT_BLACK);
-      String mod16m = String(mod16msw);
-      tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.7, TFT_HEIGHT * 0.75, 2);
-    }
-    else
-    {
-      tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
-      String mod14f = String(mod14fsw);
-      tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.75, 2);
-      tft.setTextColor(TFT_GOLD, TFT_BLACK);
-      String mod16f = String(mod16fsw);
-      tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.75, 2);
+      if (metric == 1)
+      {
+        String mod14m = String(mod14msw);
+        tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
+        tft.drawString(String(mod14m + "-m  "), TFT_WIDTH * 0.05, TFT_HEIGHT * 0.75, 2);
+        tft.setTextColor(TFT_GOLD, TFT_BLACK);
+        String mod16m = String(mod16msw);
+        tft.drawString(String(mod16m + "-m  "), TFT_WIDTH * 0.7, TFT_HEIGHT * 0.75, 2);
+      }
+      else
+      {
+        tft.setTextColor(TFT_GREENYELLOW, TFT_BLACK);
+        String mod14f = String(mod14fsw);
+        tft.drawString(String(mod14f + "-FT  "), TFT_WIDTH * 0, TFT_HEIGHT * 0.75, 2);
+        tft.setTextColor(TFT_GOLD, TFT_BLACK);
+        String mod16f = String(mod16fsw);
+        tft.drawString(String(mod16f + "-FT  "), TFT_WIDTH * 0.6, TFT_HEIGHT * 0.75, 2);
+      }
     }
   }
 }
@@ -592,7 +602,7 @@ void gaugeBaseLayout()
     }
   }
 
-  debugln("Guages Create");
+  debugln("Gauges Create");
 }
 
 void displayGaugeData()
@@ -776,6 +786,7 @@ void setup()
   // setup TFT
   tft.init();
   debugln("TFT Init");
+  // tft.invertDisplay(1);
   tft.setRotation(LCDROT);
   tft.fillScreen(TFT_BLACK);
 
