@@ -45,10 +45,10 @@
 #define ResFact 2      // 1 = 128x128   2 = 240x240
 
 // User Interface Settings -----------------------------------------------------------------
-#define GUI 0      // 1= on 0= off
+#define GUI 1      // 1= on 0= off
 #define metric 0   // 1= on 0= off   Available since 1866 in the US
 #define statinfo 1 // 2= bottom 1= top, 0= off
-#define MOD 0      // 1= on 0= off
+#define MOD 1      // 1= on 0= off
 #define RODA 0     // 1= on 0= off
 
 // Init tft and sprites
@@ -143,97 +143,7 @@ const int buttonPin = BUTTON_PIN; // push button
 // Functions
 float batStat();
 
-void BatGauge(int locX, int locY, float batV)
-{
-
-#if GUI == 1
-  // Add to gauge sprite
-  gauge.drawRect(locX, locY, 25, 12, TFT_WHITE);
-  gauge.drawRect((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
-  gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
-
-  // Fill with the color that matches the charge state
-  if (batV > 3.4 and batV < 3.6)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 15, 10, TFT_YELLOW);
-  }
-  if (batV < 3.4)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 10, 10, TFT_RED);
-  }
-  if (batV > 3.6)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
-  }
-#else
-  // Draw the outline and clear the box
-  tft.drawRect(locX, locY, 25, 12, TFT_WHITE);
-  tft.drawRect((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
-  tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
-
-  // Fill with the color that matches the charge state
-  if (batV > 3.4 and batV < 3.6)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 15, 10, TFT_YELLOW);
-  }
-  if (batV < 3.4)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 10, 10, TFT_RED);
-  }
-  if (batV > 3.6)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
-  }
-#endif
-}
-
-void SenseGauge(int locX, int locY, float senV)
-{
-
-#if GUI == 1
-  // Draw the outline and clear the box
-  gauge.drawRect(locX, locY, 25, 12, TFT_WHITE);
-  gauge.drawRect((locX + 5), (locY - 3), 4, 3, TFT_WHITE);
-  gauge.drawRect((locX + 16), (locY - 3), 4, 3, TFT_WHITE);
-  gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
-
-  // Fill with the color that matches the charge state
-  if (senV > 7.5 and senV < 9.0)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_YELLOW);
-  }
-  if (senV <= 7.5)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_RED);
-  }
-  if (senV >= 9.0)
-  {
-    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLUE);
-  }
-#else
-  // Draw the outline and clear the box
-  tft.drawRect(locX, locY, 25, 12, TFT_WHITE);
-  tft.drawRect((locX + 5), (locY - 3), 4, 3, TFT_WHITE);
-  tft.drawRect((locX + 16), (locY - 3), 4, 3, TFT_WHITE);
-  tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
-
-  // Fill with the color that matches the charge state
-  if (senV > 7.5 and senV < 9.0)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_YELLOW);
-  }
-  if (senV <= 7.5)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_RED);
-  }
-  if (senV >= 9.0)
-  {
-    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLUE);
-  }
-#endif
-}
-
-void SenseCheck()
+void SenseFault()
 {
   debugln("Low mV reading from Sensor");
   tft.fillScreen(TFT_YELLOW);
@@ -247,7 +157,7 @@ void SenseCheck()
   delay(5000);
 }
 
-void BattCheck()
+void BattFault()
 {
   debugln("Low V reading from Battery");
   tft.fillScreen(TFT_YELLOW);
@@ -371,6 +281,110 @@ void o2calibration()
   calFactor = (1 / RA.getAverage() * 20.900); // Auto Calibrate to 20.9%
 }
 
+void BatGauge(int locX, int locY, float batV)
+{
+
+#if GUI == 1
+  // Add to gauge sprite
+  gauge.drawRect(locX, locY, 25, 12, TFT_WHITE);
+  gauge.drawRect((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
+  gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
+
+  // Fill with the color that matches the charge state
+  if (batV >= 3.4 and batV < 3.6)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 15, 10, TFT_YELLOW);
+  }
+  if (batV < 3.4)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 10, 10, TFT_RED);
+  }
+  if (batV >= 3.6)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
+  }
+#else
+  // Draw the outline and clear the box
+  tft.drawRect(locX, locY, 25, 12, TFT_WHITE);
+  tft.drawRect((locX + 25), (locY + 4), 3, 4, TFT_WHITE);
+  tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
+
+  // Fill with the color that matches the charge state
+  if (batV > 3.4 and batV < 3.6)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 15, 10, TFT_YELLOW);
+  }
+  if (batV < 3.4)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 10, 10, TFT_RED);
+  }
+  if (batV > 3.6)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
+  }
+#endif
+  if (batV < 3.2) { BattFault(); }
+
+}
+
+void SenseGauge(int locX, int locY, float senV)
+{
+
+#if GUI == 1
+  // Draw the outline and clear the box
+  gauge.drawRect(locX, locY, 25, 12, TFT_WHITE);
+  gauge.drawRect((locX + 5), (locY - 3), 4, 3, TFT_WHITE);
+  gauge.drawRect((locX + 16), (locY - 3), 4, 3, TFT_WHITE);
+  gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
+
+  // Fill with the color that matches the charge state
+  if (senV >= 9.0)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLUE);
+  }
+  if (senV >= 8 and senV < 9.0 )
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
+  }
+  if (senV > 7.5 and senV < 8.0)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_YELLOW);
+  }
+  if (senV <= 7.5)
+  {
+    gauge.fillRect((locX + 1), (locY + 1), 23, 10, TFT_RED);
+  }
+
+#else
+  // Draw the outline and clear the box
+  tft.drawRect(locX, locY, 25, 12, TFT_WHITE);
+  tft.drawRect((locX + 5), (locY - 3), 4, 3, TFT_WHITE);
+  tft.drawRect((locX + 16), (locY - 3), 4, 3, TFT_WHITE);
+  tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLACK);
+
+  // Fill with the color that matches the charge state
+  if (senV > 7.5 and senV < 8.0)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_YELLOW);
+  }
+  if (senV >= 8 and senV < 9.0 )
+  {
+    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_GREEN);
+  }
+  if (senV <= 7.5)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_RED);
+  }
+  if (senV >= 9.0)
+  {
+    tft.fillRect((locX + 1), (locY + 1), 23, 10, TFT_BLUE);
+  }
+#endif
+
+if (senV < 7.1) { SenseFault(); }
+
+}
+
 void testfillcircles(uint8_t radius, uint16_t color)
 {
   for (int16_t x = radius; x < tft.width(); x += radius * 2)
@@ -445,7 +459,7 @@ void displayUtilData()
     if (mVolts > 7.5 and mVolts <= 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (mVolts <= 7.5) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (mVolts > 9.0) { tft.setTextColor(TFT_SKYBLUE, TFT_BLACK); }
-    if (mVolts < 4.0) { SenseCheck(); }
+    if (mVolts < 7.1) { SenseFault(); }
     String mv = String(mVolts, 1);
 
     tft.drawCentreString(String(mv + " mV "), TFT_WIDTH * 0.2, TFT_HEIGHT * .93, 2);
@@ -455,7 +469,7 @@ void displayUtilData()
     if (batVolts > 3.6) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
 
     String bv = String(batVolts, 1);
-    if (batVolts < 3.2) { BattCheck(); }
+    if (batVolts < 3.2) { BattFault(); }
 
     tft.drawCentreString(String(bv + " V  "), TFT_WIDTH * 0.8, TFT_HEIGHT * .93, 2);
 
@@ -769,7 +783,7 @@ void displayGaugeData()
 
     gauge.pushSprite(0, spFactor);
   }
-  debugln("Needle Sequence");
+
 }
 #endif
 
@@ -803,7 +817,7 @@ void setup()
   debugln("OTA Startup");
 #endif
 
-  tft.fillScreen(TFT_GOLD);
+  tft.fillScreen(TFT_GREENYELLOW);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
   debugln("init display test done");
@@ -812,15 +826,19 @@ void setup()
   tft.setTextSize(1);
   tft.drawCentreString(MODEL, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+#if ESP32
+  tft.drawCentreString(String (chipId), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
+#endif
+
 #if defined(OTA_UP)
   tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
   Serial.println(WiFi.localIP());
 #endif
 
-  delay(1500);
+  delay(2500);
   tft.fillScreen(TFT_BLACK);
 
-  // setup display and calibrate unit--------------------------------------------------------------------------------------------------------------
+  // setup display and calibrate unit
   initADC();
   debugln("Post ADS check statement");
 

@@ -8,9 +8,13 @@
 #include "WProgram.h"
 #endif
 
+#if defined(ESP32)
+#include "ChipID.h"
+#endif
+
 // Software Definitions
 #define MODEL "EANx O2 Upcycler"
-#define VERSION "0.46 Beta"
+#define VERSION "0.48 Beta"
 #define FILE "EANx_Upcycler on Platform IO"
 
 /*
@@ -48,6 +52,10 @@ void printVersionToSerial()
     // Output our Validation from Toolchain and Library Information
     Serial.print(F("MCU:\t"));
     Serial.println(VAL_MCU);
+
+#ifdef ESP32
+    ChipID();
+#endif
 
     // Output model and version info
     Serial.print(F("Model:\t"));
