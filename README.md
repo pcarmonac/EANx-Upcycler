@@ -60,10 +60,16 @@ The current prototype unit is built using:
 + Generic ADS1115 
 + SPI Organic light-emitting diode (OLED) ST7789
 + O2 Sensor
++ 16340 Battery
 + Custom PCB fit to project case
 + Project case
 
 *Prototype 4*
 
 ![Custom PCB version](https://lh3.googleusercontent.com/pw/AIL4fc_xV2YWr-FOy9fTgCVv1qJvXfss7XXug2cmfTwabwHQb4MrrQRQn25uYb2qKOo2hIIW4s7WPj61GEHNv8foAk6tiZ7ztep2YEQh7d-Uges87c64GSATMVJgouoNBcy8N-WcfUyh_iExNov7f3sfYL7hUw=w525-h933-s-no?authuser=0)
+
+
+## Basic Operations 
+Unit is rechargeable with any 5-20v USB-C negotiating charger (i.e. phone charger).  The unit has a battery meeter in the upper right of the screen for the 16340 battery status, and in the upper left for the sensor unit.   If the sensor unit is yellow or red, please replace the O2 sensor, if the battery monitor is yellow or red please fully charge the unit before use. 
+
 
