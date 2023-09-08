@@ -24,10 +24,6 @@
 #include "pin_config.h"
 #include "version.h"
 
-#if defined(OTA_UP)
-#include "ElegantOTA.h"
-#endif
-
 // Debugging
 #define DEBUG 1
 
@@ -814,12 +810,6 @@ void setup()
   testdrawcircles(5, TFT_WHITE);
   delay(500);
 
-#if defined(OTA_UP)
-  // Startup Elegant OTA
-  ElOTA();
-  debugln("OTA Startup");
-#endif
-
   tft.fillScreen(TFT_GREENYELLOW);
   tft.setTextSize(1 * ResFact);
   tft.setTextColor(TFT_BLACK);
@@ -831,11 +821,6 @@ void setup()
   tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
 #if ESP32
   tft.drawCentreString(String (chipId), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
-#endif
-
-#if defined(OTA_UP)
-  tft.drawCentreString((WiFi.localIP().toString()), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.9, 4);
-  Serial.println(WiFi.localIP());
 #endif
 
   delay(2500);
