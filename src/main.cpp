@@ -45,11 +45,13 @@
 #define ResFact 2      // 1 = 128x128   2 = 240x240
 
 // User Interface Settings -----------------------------------------------------------------
-#define GUI 1      // 1= on 0= off
-#define metric 0   // 1= on 0= off   Available since 1866 in the US
-#define statinfo 1 // 2= bottom 1= top, 0= off
-#define MOD 1      // 1= on 0= off
-#define RODA 0     // 1= on 0= off
+#define GUI 0       // 1= on 0= off
+#define nerds 1     // 1= on 0= off   GUI of 1 will override this setting
+#define metric 0    // 1= on 0= off   Available since 1866 in the US
+#define statinfo 1  // 2= bottom 1= top, 0= off
+#define MOD 1       // 1= on 0= off
+#define RODA 1      // 1= on 0= off
+
 
 // Init tft and sprites
 TFT_eSPI tft = TFT_eSPI();
@@ -167,7 +169,7 @@ void BattFault()
   tft.drawCentreString("Battery", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
   tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
   tft.setTextSize(1);
-  tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
+  tft.drawCentreString(String(batVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
   delay(5000);
 }
 
@@ -454,7 +456,8 @@ void displayUtilData()
   SenseGauge((TFT_WIDTH * 0.1), (TFT_HEIGHT * (tbFactor + 0.02)), (mVolts));
 
   // Stats for nerds text
-  /*
+  #if (nerds == 1 and GUI == 0)
+
     tft.setTextSize(1);
     if (mVolts > 7.5 and mVolts <= 9.0) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (mVolts <= 7.5) { tft.setTextColor(TFT_RED, TFT_BLACK); }
@@ -462,22 +465,22 @@ void displayUtilData()
     if (mVolts < 7.1) { SenseFault(); }
     String mv = String(mVolts, 1);
 
-    tft.drawCentreString(String(mv + " mV "), TFT_WIDTH * 0.2, TFT_HEIGHT * .93, 2);
+    tft.drawCentreString(String(mv + " mV "), TFT_WIDTH * 0.18, TFT_HEIGHT * .1, 2);
 
-    if (batVolts > 3.4 and mVolts < 3.6) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
+    if (batVolts > 3.4 and batVolts < 3.6) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (batVolts < 3.4) { tft.setTextColor(TFT_RED, TFT_BLACK); }
     if (batVolts > 3.6) { tft.setTextColor(TFT_GREEN, TFT_BLACK); }
 
     String bv = String(batVolts, 1);
     if (batVolts < 3.2) { BattFault(); }
 
-    tft.drawCentreString(String(bv + " V  "), TFT_WIDTH * 0.8, TFT_HEIGHT * .93, 2);
+    tft.drawCentreString(String(bv + " V  "), TFT_WIDTH * 0.88, TFT_HEIGHT * .1, 2);
 
     //tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1);
     tft.setTextColor(TFT_LIGHTGREY, TFT_BLACK);
     tft.drawCentreString(String(VERSION), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.93, 2);
-  */
+  #endif
 }
 
 #if GUI == 0
