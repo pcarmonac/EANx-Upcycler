@@ -70,6 +70,6 @@ The current prototype unit is built using:
 
 
 ## Basic Operations 
-Unit is rechargeable with any 5-20v USB-C negotiating charger (i.e. phone charger).  The unit has a battery meeter in the upper right of the screen for the 16340 battery status, and in the upper left for the sensor unit.   If the sensor unit is yellow or red, please replace the O2 sensor, if the battery monitor is yellow or red please fully charge the unit before use. 
+Unit is rechargeable with any 5-20v USB-C negotiating charger (i.e. phone charger).  The unit has a battery meter in the upper right of the screen for the 16340 battery status, and in the upper left for the sensor unit.   If the sensor unit is yellow or red, please replace the O2 sensor, if the battery monitor is yellow or red please fully charge the unit before use. 
 
 You can use Expressif's ESP Flash Download Tool or an online Serial Connection tool (https://serial.huhn.me/) to update the firmware on your device.  Do so with caution the firmware portion starts at 0x10000 memory position. 
