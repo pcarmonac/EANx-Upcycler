@@ -25,7 +25,7 @@
 #include "version.h"
 
 // Debugging
-#define DEBUG 1
+#define DEBUG 0
 
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
@@ -46,7 +46,7 @@
 #define metric 0    // 1= on 0= off   Available since 1866 in the US
 #define statinfo 1  // 2= bottom 1= top, 0= off
 #define MOD 1       // 1= on 0= off
-#define RODA 1      // 1= on 0= off
+#define RODA 0      // 1= on 0= off
 
 
 // Init tft and sprites
@@ -152,7 +152,7 @@ void SenseFault()
   tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
   tft.setTextSize(1);
   tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
-  delay(5000);
+  delay(50000);
 }
 
 void BattFault()
@@ -501,15 +501,15 @@ void displayTextData()
   // Generate Text layout
   if (prevO2 != currentO2)
   {
-    if (currentO2 > 20 and currentO2 < 22)
+    if (currentO2 > 19.5 and currentO2 < 22)
     {
       tft.setTextColor(TFT_CYAN, TFT_BLACK);
     }
-    if (currentO2 <= 20)
+    if (currentO2 <= 19.5)
     {
       tft.setTextColor(TFT_YELLOW, TFT_BLACK);
     }
-    if (currentO2 <= 18)
+    if (currentO2 <= 17)
     {
       tft.setTextColor(TFT_RED, TFT_BLACK);
     }
@@ -521,7 +521,7 @@ void displayTextData()
     // Draw Text Layout -- Adjust these layouts to suit you LCD
     tft.setTextSize(1 * ResFact);
     String o2 = String(currentO2, 1);
-    float h = 0.20;
+    float h = 0.22;
     if (MOD == 0)
     {
       h = 0.35;
@@ -931,6 +931,7 @@ void loop()
   debugln(mod16fsw);
 
 #if statinfo != 0
+  textBaseLayout();
   displayUtilData();
 #endif
 

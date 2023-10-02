@@ -27,8 +27,8 @@
 #elif defined(ARDUINO_ESP32_PICO)
   #define TFT_SDA       21     
   #define TFT_SCL       22
-  #define TFT_MOSI      23    // Data out
-  #define TFT_SCLK      18    // Clock out  #define 
+  #define TFT_SCLK      23    // Data out
+  #define TFT_MOSI      18    // Clock out  #define 
   #define TFT_RST       5     // Or set to -1 and connect to Arduino RESET pin                                            
   #define TFT_DC        10
   #define TFT_CS        9
