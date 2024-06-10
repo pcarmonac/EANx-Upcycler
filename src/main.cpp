@@ -25,7 +25,7 @@
 #include "version.h"
 
 // Debugging
-#define DEBUG 0
+#define DEBUG 1
 
 #if DEBUG == 1
 #define debug(x) Serial.print(x)
@@ -44,7 +44,7 @@
 #define GUI 0       // 1= on 0= off
 #define nerds 1     // 1= on 0= off   GUI of 1 will override this setting
 #define metric 0    // 1= on 0= off   Available since 1866 in the US
-#define statinfo 1  // 2= bottom 1= top, 0= off
+#define statinfo 1  // 2= bottom 1= top, 0= off [GUI requires off]
 #define MOD 1       // 1= on 0= off
 #define RODA 0      // 1= on 0= off
 
@@ -147,9 +147,9 @@ void SenseFault()
   tft.fillScreen(TFT_YELLOW);
   tft.setTextColor(TFT_RED);
   tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
-  tft.drawCentreString("Sensor mV", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
-  tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+  tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
+  tft.drawCentreString("Sensor mV", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 4);
+  tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
   tft.setTextSize(1);
   tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
   delay(50000);
@@ -161,9 +161,9 @@ void BattFault()
   tft.fillScreen(TFT_YELLOW);
   tft.setTextColor(TFT_RED);
   tft.setTextSize(1 * ResFact);
-  tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
-  tft.drawCentreString("Battery", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
-  tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+  tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
+  tft.drawCentreString("Battery", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 4);
+  tft.drawCentreString("Low", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
   tft.setTextSize(1);
   tft.drawCentreString(String(batVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
   delay(5000);
@@ -194,9 +194,9 @@ float initADC()
     tft.fillScreen(TFT_YELLOW);
     tft.setTextColor(TFT_RED);
     tft.setTextSize(1 * ResFact);
-    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
-    tft.drawCentreString("ADC", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
-    tft.drawCentreString("Fail", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
+    tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
+    tft.drawCentreString("ADC", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 4);
+    tft.drawCentreString("Fail", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
     delay(5000);
     while (1)
       ;
@@ -258,7 +258,7 @@ void o2calibration()
     if (abs((calFactor / calErrChk) - 1) * 100 > 0.15)
     {
       debugln("Calibration Checksum out of spec");
-      tft.fillScreen(TFT_CYAN);
+      tft.fillScreen(TFT_ORANGE);
       tft.setTextColor(TFT_BLACK);
       tft.setTextSize(1 * ResFact);
       tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 2);
@@ -266,7 +266,7 @@ void o2calibration()
       tft.drawCentreString("Calibration", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 2);
       tft.drawCentreString("Standby", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.65, 2);
       tft.drawCentreString("+++++++++++++", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.80, 2);
-      tft.drawCentreString(String(abs((calFactor / calErrChk) - 1) * 100), TFT_WIDTH * 0.85, TFT_HEIGHT * 0.90, 1);
+      tft.drawCentreString(String(abs((calFactor / calErrChk) - 1) * 100), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.80, 1);
       delay(2000);
       cal = 1;
     }
@@ -686,7 +686,7 @@ void displayGaugeData()
       o2OffAgl = o2OffAgl + 360;
 
     String ox = String(currentO2, 1);
-    gauge.drawCentreString(ox, centerX, centerY + 90, 7);
+    gauge.drawCentreString(ox, centerX, centerY + 90, 6);
     // debugln(uprAngle);
     // debugln(o2Angle);
 
@@ -697,7 +697,7 @@ void displayGaugeData()
       String modx = String(mod14fsw);
       String modc = String(mod16fsw);
       gauge.setTextColor(TFT_GREENYELLOW, color5);
-      gauge.drawCentreString(modx, centerX2, centerY2 - 140, 7);
+      gauge.drawCentreString(modx, centerX2, centerY2 - 140, 6);
       gauge.setTextColor(TFT_ORANGE, TFT_BLACK);
       gauge.setTextSize(2);
       gauge.drawCentreString(modc, centerX2 + 95, centerY2 - 217, 2);
@@ -810,12 +810,13 @@ void setup()
   testdrawcircles(5, TFT_WHITE);
   delay(500);
 
-  tft.fillScreen(TFT_GREENYELLOW);
-  tft.setTextSize(1 * ResFact);
-  tft.setTextColor(TFT_BLACK);
+  tft.fillScreen(TFT_DARKCYAN);
+  // tft.setTextSize(1 * ResFact);
+  tft.setTextSize(1);
+  tft.setTextColor(TFT_WHITE);
   debugln("init display test done");
-  tft.drawCentreString("init", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
-  tft.drawCentreString("complete", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.2, 4);
+  tft.drawCentreString("Display", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.15, 4);
+  tft.drawCentreString("Initialized", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
   tft.setTextSize(1);
   tft.drawCentreString(MODEL, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.45, 4);
   tft.drawCentreString(VERSION, TFT_WIDTH * 0.5, TFT_HEIGHT * 0.6, 4);
@@ -823,7 +824,7 @@ void setup()
   tft.drawCentreString(String (chipId), TFT_WIDTH * 0.5, TFT_HEIGHT * 0.75, 4);
 #endif
 
-  delay(2500);
+  delay(3000);
   tft.fillScreen(TFT_BLACK);
 
   // setup display and calibrate unit
@@ -899,7 +900,7 @@ void loop()
   mVolts = (aveSensorValue * multiplier); // Units: mV
 
 #ifdef ESP32
-  batVolts = (batStat() / 1000) * BAT_ADJ; // Battery Check ESP based boards
+    batVolts = (batStat() / 1000) * BAT_ADJ; // Battery Check ESP based boards
 #endif
 
   mod14fsw = floor(33 * ((modppo / (currentO2 / 100)) - 1));

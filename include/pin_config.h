@@ -14,15 +14,15 @@
 #elif defined(ARDUINO_XIAO_ESP32C3)  // Seeed XIAO ESP32 C3
   #define SDA           6     
   #define SCL           7
-  #define TFT_CS        4  
-  #define TFT_DC        9 
+  #define TFT_CS        2  
+  #define TFT_DC        3 
   #define TFT_MOSI      10    // Data out
   #define TFT_SCLK      8     // Clock out  
-  #define TFT_RST       -1    // Or set to -1 and connect to Arduino RESET pin 
-  #define BUTTON_PIN    3
+  #define TFT_RST       4    // Or set to -1 and connect to Arduino RESET pin 
+  #define BUTTON_PIN    5
   #define VAL_MCU       "Seeed Xiao ESP32 C3"
   #include "bat_stat.h"
-  #define BAT_ADJ       4.0
+  #define BAT_ADJ       3.5
 
 #elif defined(ARDUINO_ESP32_PICO)
   #define TFT_SDA       21     
