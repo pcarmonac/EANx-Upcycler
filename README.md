@@ -30,7 +30,7 @@ Some of this code is adapted from other EANx project scripts:
 Unit is rechargeable with any 5-20v USB-C negotiating charger (i.e. phone charger).  The unit has a battery meter in the upper right of the screen for the 16340 battery status, and in the upper left for the sensor unit.   If the sensor unit is yellow or red, please replace the O2 sensor, if the battery monitor is yellow or red please fully charge the unit before use. 
 
 ### Firmware and Package Upates
-The recommended method for firmware updates or to reflash your device is to use the browser based updater here:  (https://lbehrler.github.io/).
+The recommended method for firmware updates or to reflash your device is to use the browser based updater here:  ([https://lbehrler.github.io/](https://lbehrler.github.io/EANxUpcycler.github.io/)).
 
 Alternately updates can be made using Expressif's ESP Flash Download Tool or an online Serial Connection tool (https://serial.huhn.me/) to update the firmware on your device.  Do so with caution the firmware portion starts at 0x10000 memory position. 
 
