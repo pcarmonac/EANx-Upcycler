@@ -14,7 +14,7 @@
 
 // Libraries
 #include <Arduino.h>
-#include <Wire.h>
+// #include <Wire.h>
 #include <RunningAverage.h>
 #include <SPI.h>
 #include <Adafruit_GFX.h> // Core graphics library
@@ -37,8 +37,9 @@
 
 // Display Definitions
 #define TFT_WIDTH 240  // OLED display width, in pixels
-#define TFT_HEIGHT 240 // OLED display height, in pixels
-#define ResFact 2      // 1 = 128x128   2 = 240x240
+#define TFT_HEIGHT 320 // OLED display height, in pixels
+#define ResFact 2      // 1 = 128x128   2 = 240x240 
+#define ROUNDISP 0     // 1= yes 0= no
 
 // User Interface Settings -----------------------------------------------------------------
 #define GUI 0       // 1= on 0= off
@@ -141,6 +142,21 @@ const int buttonPin = BUTTON_PIN; // push button
 // Functions
 float batStat();
 
+/*void gotoSleep() 
+{
+  Serial.println("going to sleep in 3 sec....");   
+  delay(3000); 
+  esp_deep_sleep_enable_gpio_wakeup(1ULL << buttonPin,ESP_GPIO_WAKEUP_GPIO_HIGH);  
+  digitalWrite(TFT_BL, LOW); // turns off backlight
+  delay(120); // Delay for shutdown time before another command can be sent
+  Serial.println("going to sleep now"); 
+  delay(1000);
+  tft.writecommand(0x10); // Sleep
+  delay(5); // Delay for shutdown time before another command can be sent
+  esp_deep_sleep_start();
+  //esp_light_sleep_start();
+}*/
+
 void SenseFault()
 {
   debugln("Low mV reading from Sensor");
@@ -152,7 +168,7 @@ void SenseFault()
   tft.drawCentreString("LOW", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
   tft.setTextSize(1);
   tft.drawCentreString(String(mVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
-  delay(50000);
+  delay(30000);
 }
 
 void BattFault()
@@ -166,7 +182,7 @@ void BattFault()
   tft.drawCentreString("Low", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
   tft.setTextSize(1);
   tft.drawCentreString(String(batVolts), TFT_WIDTH * .5, TFT_HEIGHT * 0.8, 4);
-  delay(5000);
+  delay(30000);
 }
 
 float initADC()
@@ -197,9 +213,8 @@ float initADC()
     tft.drawCentreString("Error", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.1, 4);
     tft.drawCentreString("ADC", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.4, 4);
     tft.drawCentreString("Fail", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.7, 4);
-    delay(5000);
-    while (1)
-      ;
+    delay(30000);
+    while (1);
   }
   return (multiplier);
 }
@@ -220,7 +235,7 @@ void o2calibration()
     debugln("Calibration Screen Text");
 
     // get running average value from ADC input Pin
-    RA.clear();
+    RA.clear(); 
     for (int x = 0; x <= (RA_SIZE * 3); x++)
     {
       int sensorValue = 0;
@@ -228,9 +243,8 @@ void o2calibration()
       RA.addValue(sensorValue);
       delay(12); // was 8
     }
-    debug("average calibration read ");
+    debug("Average calibration read ");
     debugln(RA.getAverage()); // average cal factor serial print for debugging
-
     calFactor = RA.getAverage();
     delay(1000); // Slow the loop for checksum
 
@@ -461,7 +475,7 @@ void displayUtilData()
     if (mVolts < 7.1) { SenseFault(); }
     String mv = String(mVolts, 1);
 
-    tft.drawCentreString(String(mv + " mV "), TFT_WIDTH * 0.18, TFT_HEIGHT * .1, 2);
+    tft.drawCentreString(String(mv + " mV "), TFT_WIDTH * 0.18, TFT_HEIGHT * 0.1, 2);
 
     if (batVolts > 3.4 and batVolts < 3.6) { tft.setTextColor(TFT_YELLOW, TFT_BLACK); }
     if (batVolts < 3.4) { tft.setTextColor(TFT_RED, TFT_BLACK); }
@@ -470,7 +484,7 @@ void displayUtilData()
     String bv = String(batVolts, 1);
     if (batVolts < 3.2) { BattFault(); }
 
-    tft.drawCentreString(String(bv + " V  "), TFT_WIDTH * 0.88, TFT_HEIGHT * .1, 2);
+    tft.drawCentreString(String(bv + " V  "), TFT_WIDTH * 0.88, TFT_HEIGHT * 0.1, 2);
 
     //tft.drawString(String(millis() / 1000), TFT_WIDTH * 0.05, TFT_HEIGHT * 0, 2);
     tft.setTextSize(1);
@@ -483,6 +497,7 @@ void displayUtilData()
 void textBaseLayout()
 {
   // Draw Layout -- Adjust this layouts to suit you LCD
+
   tft.setTextColor(TFT_MAGENTA, TFT_BLACK);
   tft.setTextSize(1 * ResFact);
   tft.drawCentreString("O %", TFT_WIDTH * 0.5, TFT_HEIGHT * 0, 4);
@@ -494,6 +509,8 @@ void textBaseLayout()
   {
     tft.drawCentreString("@1.4  MOD  @1.6", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.62, 2);
   }
+  
+  debugln("Base layout");
 }
 
 void displayTextData()
@@ -526,8 +543,10 @@ void displayTextData()
     {
       h = 0.35;
     }
-    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * h, 7);
 
+    tft.drawCentreString(o2, TFT_WIDTH * 0.5, TFT_HEIGHT * h, 7);
+    debugln("Write O2 string");
+  
     tft.setTextSize(1 * ResFact);
     if (MOD == 1)
     {
@@ -793,12 +812,13 @@ void setup()
   // Call our validation to output the message (could be to screen / web page etc)
   printVersionToSerial();
 
-  pinMode(buttonPin, INPUT_PULLUP);
+  pinMode(buttonPin, INPUT);
   debugln("Pinmode Init");
 
   // setup TFT
   tft.init();
   debugln("TFT Init");
+  
   // tft.invertDisplay(1);
   tft.setRotation(LCDROT);
   tft.fillScreen(TFT_BLACK);
@@ -814,7 +834,6 @@ void setup()
   // tft.setTextSize(1 * ResFact);
   tft.setTextSize(1);
   tft.setTextColor(TFT_WHITE);
-  debugln("init display test done");
   tft.drawCentreString("Display", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.15, 4);
   tft.drawCentreString("Initialized", TFT_WIDTH * 0.5, TFT_HEIGHT * 0.3, 4);
   tft.setTextSize(1);
@@ -832,6 +851,8 @@ void setup()
   debugln("Post ADS check statement");
 
   o2calibration();
+  debugln("Post O2 calibration");
+
 #if RODA == 1
   safetyrule();
 #endif
@@ -844,10 +865,13 @@ void setup()
 #if GUI == 1
   gaugeBaseLayout(); // Graphic Layout
 #else
+  debugln("PRE Text Based layout");
   textBaseLayout();  // Text Layout
+  debugln("POST Text Based layout");
 #endif
 
-  debugln("Setup Complete");
+  debugln("Setup Complete Starting Loop");
+
 }
 
 // the loop routine runs over and over again forever:
@@ -855,23 +879,30 @@ void loop()
 {
 
   multiplier = initADC();
+  /* debugln("Button Check");
 
   int bstate = digitalRead(buttonPin);
-  // debugln(bstate);
-  if (bstate == LOW)
+  //debugln(bstate);
+  if (bstate == LOW) // must be LOW for TTGO OI
   {
+    //gotoSleep();
+
     if (LCDROT == 0)
     {
       LCDROT = 2;
+      //digitalWrite(TFT_BL, LOW); // turns off backlight
+
     }
     else
     {
       LCDROT = 0;
+      //digitalWrite(TFT_BL, HIGH); // turns off backlight
     }
     tft.setRotation(LCDROT);
     tft.fillScreen(TFT_BLACK);
   }
 
+*/
   // get running average value from ADC input Pin
   RA.clear();
   for (int x = 0; x <= RA_SIZE; x++)
