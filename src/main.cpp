@@ -37,7 +37,7 @@
 
 // Display Definitions
 #define TFT_WIDTH 240  // OLED display width, in pixels
-#define TFT_HEIGHT 320 // OLED display height, in pixels
+#define TFT_HEIGHT 240 // OLED display height, in pixels
 #define ResFact 2      // 1 = 128x128   2 = 240x240 
 #define ROUNDISP 0     // 1= yes 0= no
 

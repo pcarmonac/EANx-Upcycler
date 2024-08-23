@@ -10,7 +10,7 @@
 #elif defined(ARDUINO_XIAO_ESP32C3) 
     #define BAT_ADC       1  // General Batt ADC
 #elif defined(ARDUINO_ARCH_ESP32) 
-    #define BAT_ADC       19  // General Batt ADC
+    #define BAT_ADC       2  // General Batt ADC
 #else  
     #define BAT_ADC       2  // General Batt ADC
 #endif

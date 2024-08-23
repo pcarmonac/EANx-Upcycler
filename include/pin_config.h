@@ -25,7 +25,7 @@
   #include "bat_stat.h"
   #define BAT_ADJ       3.5
 
-#elif defined(ARDUINO_ARCH_ESP32)
+#elif defined(XXX_ARDUINO_ARCH_ESP32) // Denky
   #define SDA         21     
   #define SCL         22
   #define TFT_MOSI    13 // In some display driver board, it might be written as "SDA" and so on.
