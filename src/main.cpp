@@ -268,8 +268,8 @@ void o2calibration()
 
     debugln(abs((calFactor / calErrChk) - 1) * 100);
 
-    // checking against a 0.15% error
-    if (abs((calFactor / calErrChk) - 1) * 100 > 0.15)
+    // checking against a 0.5% error
+    if (abs((calFactor / calErrChk) - 1) * 100 > 0.5)
     {
       debugln("Calibration Checksum out of spec");
       tft.fillScreen(TFT_ORANGE);
